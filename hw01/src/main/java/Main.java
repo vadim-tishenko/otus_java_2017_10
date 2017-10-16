@@ -42,14 +42,7 @@ public class Main {
 
         }
 
-
-        // Приход.
-        // Расход.
-        // Баланс
-        // Бонусы
-
-        System.out.printf("пополнения: %s, траты: %s, баланс: %s\n", popolnenie, trata, popolnenie.subtract(trata));
-        System.out.println("bonus:" + bonus);
+        System.out.printf("пополнения: %s, траты: %s, баланс: %s, bonus: %s\n", popolnenie, trata, popolnenie.subtract(trata),bonus);
     }
 
 
