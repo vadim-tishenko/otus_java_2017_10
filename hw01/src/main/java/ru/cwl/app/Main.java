@@ -1,3 +1,5 @@
+package ru.cwl.app;
+
 import ru.cwl.bankimport.CardOperation;
 import ru.cwl.bankimport.CsvImport;
 
@@ -8,8 +10,11 @@ import java.util.List;
 /**
  * Created by vadim.tishenko
  * on 15.10.2017 14:01.
+ *
+ * импорт операций по банковской карте.
  */
 public class Main {
+
     public static void main(String[] args) {
 
         InputStream data = Main.class.getResourceAsStream("/operations.csv");
@@ -17,7 +22,6 @@ public class Main {
         CsvImport ci = new CsvImport();
         List<CardOperation> result = ci.readFromFile(data);
         calculateStatictic(result);
-
 
     }
 
@@ -42,16 +46,9 @@ public class Main {
 
         }
 
-
-        // Приход.
-        // Расход.
-        // Баланс
-        // Бонусы
-
-        System.out.printf("пополнения: %s, траты: %s, баланс: %s\n", popolnenie, trata, popolnenie.subtract(trata));
-        System.out.println("bonus:" + bonus);
+        System.out.printf("пополнения: %s, траты: %s, баланс: %s, бонус: %s\n", popolnenie, trata,
+                popolnenie.subtract(trata),bonus);
     }
-
 
 }
 
