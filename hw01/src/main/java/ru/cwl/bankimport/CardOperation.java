@@ -7,17 +7,29 @@ import java.time.LocalDateTime;
  * Created by vadim.tishenko
  * on 15.10.2017 19:34.
  */
+
+
 public class CardOperation {
-    /*
-    "Дата операции";"Дата платежа";
-    "Номер карты";"Статус";
-    "Сумма операции";"Валюта операции";
-    "Сумма платежа";"Валюта платежа";
-    "Кэшбэк";"Категория";
-    "MCC";"Описание";
-    "Бонусы (включая кэшбэк)"
+
+    /**
+     *
+
+     "Дата операции";
+     "Дата платежа";
+     "Номер карты";
+     "Статус";
+     "Сумма операции";
+     "Валюта операции";
+     "Сумма платежа";
+     "Валюта платежа";
+     "Кэшбэк";
+     "Категория";
+     "MCC";
+     "Описание";
+     "Бонусы (включая кэшбэк)"
 
      */
+
     LocalDateTime operDate;
     LocalDateTime payDate;
     String cardNumber;
@@ -26,11 +38,11 @@ public class CardOperation {
     String currency;
     BigDecimal sumToPay;
     String curPay;
-    BigDecimal cashbak;
+    BigDecimal cashBack;
     String category;
     String mcc;
     String description;
-    BigDecimal bomus;
+    BigDecimal bonus;
 
     public LocalDateTime getOperDate() {
         return operDate;
@@ -96,12 +108,12 @@ public class CardOperation {
         this.curPay = curPay;
     }
 
-    public BigDecimal getCashbak() {
-        return cashbak;
+    public BigDecimal getCashBack() {
+        return cashBack;
     }
 
-    public void setCashbak(BigDecimal cashbak) {
-        this.cashbak = cashbak;
+    public void setCashBack(BigDecimal cashBack) {
+        this.cashBack = cashBack;
     }
 
     public String getCategory() {
@@ -128,12 +140,12 @@ public class CardOperation {
         this.description = description;
     }
 
-    public BigDecimal getBomus() {
-        return bomus;
+    public BigDecimal getBonus() {
+        return bonus;
     }
 
-    public void setBomus(BigDecimal bomus) {
-        this.bomus = bomus;
+    public void setBonus(BigDecimal bonus) {
+        this.bonus = bonus;
     }
 
     @Override
@@ -147,11 +159,11 @@ public class CardOperation {
                 ", currency='" + currency + '\'' +
                 ", sumToPay=" + sumToPay +
                 ", curPay='" + curPay + '\'' +
-                ", cashbak=" + cashbak +
+                ", cashBack=" + cashBack +
                 ", category='" + category + '\'' +
                 ", mcc='" + mcc + '\'' +
                 ", description='" + description + '\'' +
-                ", bomus=" + bomus +
+                ", bonus=" + bonus +
                 '}';
     }
 }

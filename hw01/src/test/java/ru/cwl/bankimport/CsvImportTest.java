@@ -12,9 +12,6 @@ import static org.junit.Assert.assertNull;
  * on 15.10.2017 20:04.
  */
 public class CsvImportTest {
-    //@Test
-    public void readFromFile() throws Exception {
-    }
 
     @Test
     public void readDate() throws Exception {

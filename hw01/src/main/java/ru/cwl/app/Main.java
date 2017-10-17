@@ -18,33 +18,34 @@ public class Main {
 
         CsvImport ci = new CsvImport();
         List<CardOperation> result = ci.readFromFile(data);
-        calculateStatictic(result);
+        calculateStatistic(result);
 
 
     }
 
-    private static void calculateStatictic(List<CardOperation> result) {
+    private static void calculateStatistic(List<CardOperation> result) {
         BigDecimal bonus = BigDecimal.ZERO;
-        BigDecimal popolnenie = BigDecimal.ZERO;
-        BigDecimal trata = BigDecimal.ZERO;
+        BigDecimal refill = BigDecimal.ZERO;
+        BigDecimal expenditure = BigDecimal.ZERO;
         for (CardOperation co : result) {
             BigDecimal sum = co.getSum();
             if (!"OK".equals(co.getStatus())) continue;
             switch (sum.compareTo(BigDecimal.ZERO)) {
                 case -1:
-                    trata = trata.subtract(sum);
+                    expenditure = expenditure.subtract(sum);
                     break;
                 case 0:
                     break;
                 case 1:
-                    popolnenie = popolnenie.add(sum);
+                    refill = refill.add(sum);
                     break;
             }
-            bonus = bonus.add(co.getBomus());
+            bonus = bonus.add(co.getBonus());
 
         }
 
-        System.out.printf("пополнения: %s, траты: %s, баланс: %s, bonus: %s\n", popolnenie, trata, popolnenie.subtract(trata),bonus);
+        System.out.printf("пополнения: %s, траты: %s, баланс: %s, bonus: %s\n", refill, expenditure
+                , refill.subtract(expenditure), bonus);
     }
 
 
