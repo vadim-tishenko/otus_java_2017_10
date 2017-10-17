@@ -1,3 +1,5 @@
+package ru.cwl.app;
+
 import ru.cwl.bankimport.CardOperation;
 import ru.cwl.bankimport.CsvImport;
 
