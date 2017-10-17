@@ -49,11 +49,11 @@ public class CsvImport {
         o.currency = r.get(5);
         o.sumToPay = readDecimal(r.get(6));
         o.curPay = r.get(7);
-        o.cashbak = readDecimal(r.get(8));
+        o.cashBack = readDecimal(r.get(8));
         o.category = r.get(9);
         o.mcc = r.get(10);
         o.description = r.get(11);
-        o.bomus = readDecimal(r.get(12));
+        o.bonus = readDecimal(r.get(12));
         return o;
     }
 
