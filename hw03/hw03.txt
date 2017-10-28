@@ -1,0 +1,6 @@
+ДЗ 03
+Написать свою реализацию ArrayList на основе массива.
+Проверить, что на ней работают методы java.util.Collections
+
+
+https://www.mkyong.com/unittest/junit-how-to-test-a-list/
