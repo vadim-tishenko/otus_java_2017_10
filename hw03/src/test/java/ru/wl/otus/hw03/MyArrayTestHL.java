@@ -57,7 +57,7 @@ public class MyArrayTestHL {
     //    Проверить, что на ней работают методы
     @Test
     public void addAll() {
-        List<String> l1 = new ArrayList<String>();
+        List<String> l1 = new MyArrayList<String>();
 
         Collections.addAll(l1, "Q", "W", "T");
         // Ensure Correct order
@@ -71,6 +71,8 @@ public class MyArrayTestHL {
         List<String> src=new LinkedList<String>();
         Collections.addAll(src, "Q", "W", "T");
         List<String> dst=new MyArrayList<String>();
+        Collections.addAll(dst, "Q1", "W1", "T1");
+
         Collections.copy(dst,src);
         assertThat(dst, contains("Q", "W", "T"));
     }
