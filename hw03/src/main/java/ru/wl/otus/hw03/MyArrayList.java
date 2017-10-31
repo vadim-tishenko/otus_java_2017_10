@@ -2,7 +2,6 @@ package ru.wl.otus.hw03;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -19,19 +18,20 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public boolean isEmpty() {
-        return size==0;
+        return size == 0;
     }
 
     public boolean contains(Object o) {
-        throw new NotImplementedException();
+        return indexOf(o) != -1;
     }
 
     public Iterator<T> iterator() {
-        Iterator<T> iterator= new Iterator<T>() {
-            int current=0;
+        Iterator<T> iterator = new Iterator<T>() {
+            int current = 0;
+
             @Override
             public boolean hasNext() {
-                return current<size;
+                return current < size;
             }
 
             @Override
@@ -51,18 +51,28 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public boolean add(T t) {
-        elements[size]=t;
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, elements.length * 2);
+        }
+        elements[size] = t;
         size++;
         return true;
     }
 
     public boolean remove(Object o) {
-        size--;
+        int index = indexOf(o);
+        if (index == -1) {
+            return false;
+        }
+        remove(index);
         return true;
     }
 
     public boolean containsAll(Collection<?> c) {
-        throw new NotImplementedException();
+        for (Object o : c) {
+            if (!contains(o)) return false;
+        }
+        return true;
     }
 
     public boolean addAll(Collection<? extends T> c) {
@@ -71,80 +81,77 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public boolean addAll(int index, Collection<? extends T> c) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public boolean removeAll(Collection<?> c) {
-        throw new NotImplementedException();
+        boolean result = false;
+        for (Object o : c) {
+            result |= remove(o);
+        }
+        return result;
     }
 
     public boolean retainAll(Collection<?> c) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public void clear() {
-        size=0;
+        size = 0;
     }
 
     public T get(int index) {
-        if(index>=0 && index<size){
+        if (index >= 0 && index < size) {
             return (T) elements[index];
         }
         throw new IndexOutOfBoundsException();
     }
 
     public T set(int index, T element) {
-        if(index>=0 && index<size){
-            T result= (T) elements[index];
-            elements[index]=element;
+        if (index >= 0 && index < size) {
+            T result = (T) elements[index];
+            elements[index] = element;
             return result;
         }
         throw new IndexOutOfBoundsException();
     }
 
     public void add(int index, T element) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public T remove(int index) {
-        throw new NotImplementedException();
+        T result = get(index);
+        System.arraycopy(elements, index + 1, elements, index, size - index-1);
+        size--;
+        return result;
     }
 
     public int indexOf(Object o) {
-        throw new NotImplementedException();
+        for (int index = 0; index < size; index++) {
+            if (o.equals(elements[index])) return index;
+        }
+        return -1;
     }
 
     public int lastIndexOf(Object o) {
-        throw new NotImplementedException();
+        for (int index = size - 1; index >= 0; index--) {
+            if (o.equals(elements[index])) return index;
+        }
+        return -1;
     }
 
     public ListIterator<T> listIterator() {
-        ListIterator<T> it=new MyArrayListIterator<T>((T[]) elements,size);
+        ListIterator<T> it = new MyArrayListIterator<T>((T[]) elements, size);
         return it;
     }
 
     public ListIterator<T> listIterator(int index) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
-        throw new NotImplementedException();
-    }
-
-    public String toString() {
-        Iterator<T> it = iterator();
-        if (! it.hasNext())
-            return "[]";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (;;) {
-            T e = it.next();
-            sb.append(e == this ? "(this Collection)" : e);
-            if (! it.hasNext())
-                return sb.append(']').toString();
-            sb.append(',').append(' ');
-        }
+        throw new UnsupportedOperationException();
     }
 
     public boolean equals(Object o) {
@@ -158,7 +165,7 @@ public class MyArrayList<T> implements List<T> {
         while (e1.hasNext() && e2.hasNext()) {
             T o1 = e1.next();
             Object o2 = e2.next();
-            if (!(o1==null ? o2==null : o1.equals(o2)))
+            if (!(o1 == null ? o2 == null : o1.equals(o2)))
                 return false;
         }
         return !(e1.hasNext() || e2.hasNext());

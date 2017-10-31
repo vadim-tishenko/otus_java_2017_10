@@ -5,17 +5,17 @@ package ru.wl.otus.hw03.m;
  * on 28.10.2017 22:40.
  */
 
-        import org.junit.Test;
-        import ru.wl.otus.hw03.MyArrayList;
+import org.junit.Test;
+import ru.wl.otus.hw03.MyArrayList;
 
-        import java.util.Arrays;
-        import java.util.List;
-        import java.util.Objects;
+import java.util.Arrays;
+import java.util.Objects;
 
-        import static org.hamcrest.CoreMatchers.*;
-        import static org.hamcrest.Matchers.hasProperty;
-        import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-        import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.Assert.assertThat;
 
 public class ListObjectTest {
 
