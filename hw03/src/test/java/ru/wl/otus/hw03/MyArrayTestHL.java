@@ -19,7 +19,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 public class MyArrayTestHL {
 
 
-    @Test
+    //@Test
     public void testAssertList() {
 
         List<String> actual = Arrays.asList("a", "b", "c");
@@ -54,20 +54,18 @@ public class MyArrayTestHL {
     }
 
 
-    //    Проверить, что на ней работают методы
     @Test
     public void addAll() {
         List<String> l1 = new MyArrayList<String>();
-
         Collections.addAll(l1, "Q", "W", "T");
+        Collections.addAll(l1, "Q1", "W2", "T3");
+
         // Ensure Correct order
-        assertThat(l1, contains("Q", "W", "T"));
-
-
+        assertThat(l1, contains("Q", "W", "T","Q1","W2","T3"));
     }
+
     @Test
     public void testCopy(){
-//static <T> void    copy(List<? super T> dest, List<? extends T> src)
         List<String> src=new LinkedList<String>();
         Collections.addAll(src, "Q", "W", "T");
         List<String> dst=new MyArrayList<String>();
@@ -77,12 +75,12 @@ public class MyArrayTestHL {
         assertThat(dst, contains("Q", "W", "T"));
     }
 
-
     @Test
     public void testSort() {
-        List l1 = new MyArrayList<String>();
-
-        Collections.sort(l1, (s1,s2)->0);
+        List<String> l1 = new MyArrayList<String>();
+        Collections.addAll(l1, "B","A", "C");
+        Collections.sort(l1, Comparator.naturalOrder());
+        assertThat(l1, contains("A", "B", "C"));
 
     }
 }

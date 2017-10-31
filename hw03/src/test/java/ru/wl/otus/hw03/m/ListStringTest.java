@@ -7,6 +7,7 @@ package ru.wl.otus.hw03.m;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
+import ru.wl.otus.hw03.MyArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,12 @@ public class ListStringTest {
         List<String> actual = Arrays.asList("a", "b", "c");
         List<String> expected = Arrays.asList("a", "b", "c");
 
+        /*
+                MyArrayList<String> actual = new MyArrayList<>();
+        actual.addAll(Arrays.asList("a", "b", "c"));
+        MyArrayList<String> expected = new MyArrayList<>();
+        expected.addAll(Arrays.asList("a", "b", "c"));
+         */
         //All passed / true
 
         //1. Test equal.

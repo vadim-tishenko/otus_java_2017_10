@@ -11,7 +11,6 @@ import java.util.*;
  */
 public class MyArrayList<T> implements List<T> {
 
-
     int size = 0;
     Object[] elements = new Object[100];
 
@@ -84,17 +83,23 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void clear() {
-        throw new NotImplementedException();
+        size=0;
     }
 
     public T get(int index) {
-        throw new NotImplementedException();
+        if(index>=0 && index<size){
+            return (T) elements[index];
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     public T set(int index, T element) {
-        T result= (T) elements[index];
-        elements[index]=element;
-        return result;
+        if(index>=0 && index<size){
+            T result= (T) elements[index];
+            elements[index]=element;
+            return result;
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     public void add(int index, T element) {
@@ -114,7 +119,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public ListIterator<T> listIterator() {
-        throw new NotImplementedException();
+        ListIterator<T> it=new MyArrayListIterator<T>((T[]) elements,size);
+        return it;
     }
 
     public ListIterator<T> listIterator(int index) {
@@ -123,5 +129,38 @@ public class MyArrayList<T> implements List<T> {
 
     public List<T> subList(int fromIndex, int toIndex) {
         throw new NotImplementedException();
+    }
+
+    public String toString() {
+        Iterator<T> it = iterator();
+        if (! it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            T e = it.next();
+            sb.append(e == this ? "(this Collection)" : e);
+            if (! it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof List))
+            return false;
+
+        ListIterator<T> e1 = listIterator();
+        ListIterator<?> e2 = ((List<?>) o).listIterator();
+        while (e1.hasNext() && e2.hasNext()) {
+            T o1 = e1.next();
+            Object o2 = e2.next();
+            if (!(o1==null ? o2==null : o1.equals(o2)))
+                return false;
+        }
+        return !(e1.hasNext() || e2.hasNext());
     }
 }

@@ -7,6 +7,7 @@ package ru.wl.otus.hw03.m;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
+import ru.wl.otus.hw03.MyArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,8 +26,10 @@ public class ListIntegerTest {
     @Test
     public void testAssertList() {
 
-        List<Integer> actual = Arrays.asList(1, 2, 3, 4, 5);
-        List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> actual = new MyArrayList<>();
+        actual.addAll(Arrays.asList(1, 2, 3, 4, 5));
+        List<Integer> expected = new MyArrayList<>();
+        expected.addAll(Arrays.asList(1, 2, 3, 4, 5));
 
         //All passed / true
 

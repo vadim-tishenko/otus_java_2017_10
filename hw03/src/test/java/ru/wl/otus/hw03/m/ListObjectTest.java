@@ -6,6 +6,7 @@ package ru.wl.otus.hw03.m;
  */
 
         import org.junit.Test;
+        import ru.wl.otus.hw03.MyArrayList;
 
         import java.util.Arrays;
         import java.util.List;
@@ -21,10 +22,11 @@ public class ListObjectTest {
     @Test
     public void testAssertList() {
 
-        List<Fruit> list = Arrays.asList(
+        MyArrayList<Fruit> list = new MyArrayList<>();
+        list.addAll(Arrays.asList(
                 new Fruit("Banana", 99),
                 new Fruit("Apple", 20)
-        );
+        ));
 
         //Test equals
         assertThat(list, hasItems(
