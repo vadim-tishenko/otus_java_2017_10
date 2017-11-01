@@ -7,6 +7,8 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by vadim.tishenko
@@ -25,4 +27,33 @@ public class MyArrayListTest {
         assertThat(l,hasSize(2));
     }
 
+    @Test
+    public void testContainsNull() {
+        List<String> list = new MyArrayList<String>();
+        list.add(null);
+        assertTrue(list.contains(null));
+    }
+
+    @Test
+    public void testRemoveNull() {
+        List<String> list = new MyArrayList<String>();
+        list.add(null);
+        list.remove(null);
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void testIndexOfNull() {
+        List<String> list = new MyArrayList<String>();
+        list.add(null);
+        assertEquals(0, list.indexOf(null));
+    }
+
+    @Test
+    public void testLastIndexOfNull() {
+        List<String> list = new MyArrayList<String>();
+        list.add(null);
+        list.add(null);
+        assertEquals(1, list.lastIndexOf(null));
+    }
 }

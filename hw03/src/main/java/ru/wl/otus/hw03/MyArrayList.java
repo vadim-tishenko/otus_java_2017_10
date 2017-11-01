@@ -128,15 +128,16 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public int indexOf(Object o) {
+        Objects.equals(o,o);
         for (int index = 0; index < size; index++) {
-            if (o.equals(elements[index])) return index;
+            if (Objects.equals(o,elements[index])) return index;
         }
         return -1;
     }
 
     public int lastIndexOf(Object o) {
         for (int index = size - 1; index >= 0; index--) {
-            if (o.equals(elements[index])) return index;
+            if (Objects.equals(o,elements[index])) return index;
         }
         return -1;
     }
