@@ -1,20 +1,27 @@
 package ru.cwl.otus.hw04;
 
-import com.example.Client;
-import com.example.HelloMBean;
-import javafx.beans.binding.FloatExpression;
-
-import javax.management.*;
+import javax.management.AttributeChangeNotification;
+import javax.management.InstanceNotFoundException;
+import javax.management.JMX;
+import javax.management.MBeanServerConnection;
+import javax.management.MalformedObjectNameException;
+import javax.management.Notification;
+import javax.management.NotificationListener;
+import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
 import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Supplier;
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,57 +36,7 @@ import static java.util.stream.Collectors.toList;
 public class Main {
     public static void main(String[] args) throws IOException, MalformedObjectNameException, InstanceNotFoundException {
 
-        JMXServiceURL url =
-                new JMXServiceURL("service:jmx:rmi:///jndi/rmi://:9999/jmxrmi");
-        JMXConnector jmxc = JMXConnectorFactory.connect(url, null);
-
-
-
-
-        // Create a dedicated proxy for the MBean instead of
-        // going directly through the MBean server connection
-        //
-        /*HelloMBean mbeanProxy =
-                JMX.newMBeanProxy(mbsc, mbeanName, HelloMBean.class, true);*/
-
-
-
-        Client.ClientListener listener = new Client.ClientListener();
-
-        // Get an MBeanServerConnection
-        //
-        echo("\nGet an MBeanServerConnection");
-        MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-
-        echo("\nQuery MBeanServer MBeans:");
-
-        ObjectName qName = null; //new ObjectName("java.lang");
-
-        Set<ObjectName> names =
-                new TreeSet<ObjectName>(mbsc.queryNames(qName, null));
-        for (ObjectName name : names) {
-            echo("\tObjectName = " + name);
-        }
-
-        List<ObjectName> l = names.stream().filter(e -> e.toString().contains("GarbageCollector")).collect(toList());
-        //ObjectName mbeanName = new ObjectName("java.lang:type=GarbageCollector");
-
-
-        // Add notification listener on Hello MBean
-        //
-        echo("\nAdd notification listener...");
-
-        List<GarbageCollectorMXBean> gcList=new ArrayList<>();
-
-        for (ObjectName objectName : l) {
-
-            GarbageCollectorMXBean mbeanProxy = JMX.newMBeanProxy(mbsc, objectName, GarbageCollectorMXBean.class, true);
-
-            gcList.add(mbeanProxy);
-
-            //mbsc.addNotificationListener(objectName, listener, null, null);
-        }
-        // waitForEnterPressed();
+        List<GarbageCollectorMXBean> gcMXBeansList = ManagementFactory.getGarbageCollectorMXBeans();
 
 
         ArrayList<Object> list=new ArrayList<>();
@@ -88,14 +45,29 @@ public class Main {
             add(list, () -> new long[SIZE],1000);
             del(list,997);
             System.out.println(i);
-            dumpGC(gcList);
+            dumpGC(gcMXBeansList);
         }
 
     }
 
     private static void dumpGC(List<GarbageCollectorMXBean> gcList) {
+        Map<String, String> map = new HashMap<>();
+        //• Young generation GC
+
+        map.put("Copy", "Young");
+        map.put("PS Scavenge", "Young");
+        map.put("ParNew", "Young");
+        map.put("G1 Young Generation", "Young");
+
+//• Old generation GC
+        map.put("MarkSweepCompact", "Old");
+        map.put("PS MarkSweep", "Old");
+        map.put("ConcurrentMarkSweep", "Old");
+        map.put("G1 Mixed Generation", "Old");
+
         for (GarbageCollectorMXBean gcb : gcList) {
-            System.out.printf(" %s %s %s %s\n", gcb.getObjectName(), gcb.getName(),gcb.getCollectionCount(),gcb.getCollectionTime());
+            String gcType = map.get(gcb.getName());
+            System.out.printf(" %s %s %s %s\n", gcType, gcb.getName(), gcb.getCollectionCount(), gcb.getCollectionTime());
         }
     }
 
