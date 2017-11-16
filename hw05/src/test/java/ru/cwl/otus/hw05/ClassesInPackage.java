@@ -1,9 +1,10 @@
-package ru.cwl.otus.hw05.sample;
+package ru.cwl.otus.hw05;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -37,7 +38,12 @@ public class ClassesInPackage {
 // the full path to the classpath directory
                     File dir = new File(file);
                     for (File f : dir.listFiles()) {
-                        list.add(packageAsDirName + "/" + f.getName());
+                        if(f.isDirectory()){
+                            list.addAll(Arrays.asList(getPackageContent(getPackageName(packageName, f))));
+                            //System.out.println("dir!");
+                        }else {
+                            list.add(packageAsDirName + "/" + f.getName());
+                        }
                     }
                     break;
                 case "jar":
@@ -66,8 +72,14 @@ public class ClassesInPackage {
         }
         return list.toArray(new String[] {});
     }
+
+    private static String getPackageName(String packageName, File f) {
+        return packageName.equals("") ? f.getName():packageName+'.'+f.getName();
+    }
+
     public static void main(String[] args) throws IOException {
-        String[] names = getPackageContent("ru.cwl.otus.hw05");
+        String[] names = getPackageContent("org");
+        //getPackageContent("org.hamcrest");
         for (String name : names) {
             System.out.println(name);
         }

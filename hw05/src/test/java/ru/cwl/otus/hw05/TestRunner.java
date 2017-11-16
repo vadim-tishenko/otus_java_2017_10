@@ -1,3 +1,5 @@
+package ru.cwl.otus.hw05;
+
 import ru.cwl.otus.hw05.TestClass;
 import ru.cwl.otus.hw05.annotation.After;
 import ru.cwl.otus.hw05.annotation.Before;
@@ -12,9 +14,11 @@ import java.util.List;
  * Created by vadim.tishenko
  * on 11.11.2017 18:46.
  */
-public class Main {
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        Class<TestClass> c = TestClass.class;
+public class TestRunner {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException {
+        //Class<TestClass> c = TestClass.class;
+        Class<?> c=  Thread.currentThread().getContextClassLoader().loadClass("ru.cwl.otus.hw05.TestClass");
+
         runTest(c);
 
     }
@@ -39,6 +43,9 @@ public class Main {
             }
         }
 
+        if(tests.isEmpty()){
+            return;
+        }
         Object obj = c.newInstance();
         for (Method test : tests) {
             if(beforeTest!=null){
