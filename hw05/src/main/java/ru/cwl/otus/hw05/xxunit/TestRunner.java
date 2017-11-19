@@ -69,8 +69,8 @@ public class TestRunner {
         }
         System.out.println("run test for class: " + c.getCanonicalName());
         try {
-            Object obj = c.newInstance();
             for (Method test : tests) {
+                Object obj = c.newInstance();
                 if (beforeTest != null) {
                     beforeTest.invoke(obj);
                 }
