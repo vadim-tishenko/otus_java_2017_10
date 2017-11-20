@@ -31,7 +31,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ru.cwl.otus.hw04.Main</mainClass>
+                            <mainClass>ru.cwl.otus.hw05.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

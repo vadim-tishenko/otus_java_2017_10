@@ -1,4 +1,4 @@
-package ru.cwl.otus.hw05.annotation;
+package ru.cwl.otus.hw05.xxunit.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
