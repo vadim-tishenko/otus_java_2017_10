@@ -20,6 +20,9 @@ public class Main {
         runTestForClasses(classesForTesty);
 
         runTestsForPackage("ru.cwl.otus.hw05.tests");
+
+        runTestsForPackageGV("ru.cwl.otus.hw05.tests");
+
     }
 
 

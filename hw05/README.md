@@ -7,9 +7,11 @@
 1. массивом классов с тестами,
 2. именем package в котором надо найти и запустить тесты
 
+здобавил поиск в пакетах через guava.
+
 ### сборка и запуск:
 ````
 cd hw05
 mvn clean package
-java -jar target\hw05-1.0-SNAPSHOT.jar
+java -jar target\hw05.jar
 ```` 

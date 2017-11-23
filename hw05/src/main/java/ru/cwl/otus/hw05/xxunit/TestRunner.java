@@ -1,11 +1,11 @@
 package ru.cwl.otus.hw05.xxunit;
 
-import ru.cwl.otus.hw05.xxunit.AssertException;
-import ru.cwl.otus.hw05.xxunit.ResourceList;
+import com.google.common.reflect.ClassPath;
 import ru.cwl.otus.hw05.xxunit.annotation.After;
 import ru.cwl.otus.hw05.xxunit.annotation.Before;
 import ru.cwl.otus.hw05.xxunit.annotation.Test;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,6 +18,21 @@ import java.util.List;
  */
 public class TestRunner {
 
+    // guava version......
+    public static void runTestsForPackageGV(String pkg) {
+        final ClassLoader classLoader = TestRunner.class.getClassLoader();
+
+        ClassPath classpath = null;
+        try {
+            classpath = ClassPath.from(classLoader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        for (ClassPath.ClassInfo classInfo : classpath.getTopLevelClassesRecursive(pkg)) {
+            runTest(classInfo.load());
+        }
+    }
 
     public static void runTestsForPackage(String pkg) {
         System.out.println("run tests for package: " + pkg);
