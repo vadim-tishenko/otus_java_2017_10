@@ -61,8 +61,8 @@ public class ATMTest {
 
     }
 
-    @Test @Ignore
-    public void getMoney() {
+    @Test
+    public void getMoney500() {
         atm.insert(box20x100);
         atm.insert(box15x50);
 
@@ -74,5 +74,37 @@ public class ATMTest {
         assertThat(atm.getBalance(), is(2250));
 
     }
+
+    @Test
+    public void getMoney250() {
+        atm.insert(box20x100);
+        atm.insert(box15x50);
+
+        String result = atm.getMoney(250);
+
+        assertThat(box20x100.getCount(), is(18));
+        assertThat(box15x50.getCount(), is(14));
+        assertThat(result, is("100,100,50"));
+        assertThat(atm.getBalance(), is(2500));
+
+    }
+
+    @Test
+    public void getMoney160() {
+        atm.insert(box20x100);
+        atm.insert(box15x50);
+        atm.insert(box10x10);
+
+        String result = atm.getMoney(160);
+
+        assertThat(box20x100.getCount(), is(19));
+        assertThat(box15x50.getCount(), is(14));
+        assertThat(box10x10.getCount(), is(9));
+        assertThat(result, is("100,50,10"));
+        assertThat(atm.getBalance(), is(2850-160));
+
+    }
+    // TODO: 29.11.2017 Добавить обработку недостатка денег при выдаче
+    // TODO: 29.11.2017  добавить обработку недостатка места при приеме денег
 
 }

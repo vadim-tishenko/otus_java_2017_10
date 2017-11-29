@@ -1,16 +1,13 @@
 package ru.cwl.otus.hw06;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by vadim.tishenko
  * on 28.11.2017 21:40.
  */
 public class ATM {
-    List<CashBox> cashBoxList = new ArrayList<>();
+    private List<CashBox> cashBoxList = new ArrayList<>();
 
     void insert(CashBox cashBox) {
         cashBoxList.add(cashBox);
@@ -46,6 +43,26 @@ public class ATM {
     }
 
     public String getMoney(int i) {
-        return "";
+        ArrayList<CashBox> list = new ArrayList<>(cashBoxList);
+        list.sort((c1, c2) -> c2.nominal - c1.nominal);
+        Map<CashBox, Integer> res = new LinkedHashMap<>();
+        for (CashBox cb : list) {
+            int nCount = i / cb.nominal;
+            int n = Integer.min(nCount, cb.banknotesCount);
+            if (n != 0) {
+                res.put(cb, n);
+                i = i - n * cb.nominal;
+            }
+        }
+        List<String> resList = new ArrayList<String>();
+        for (Map.Entry<CashBox, Integer> entry : res.entrySet()) {
+            entry.getKey().sub(entry.getValue());
+            String v = String.valueOf(entry.getKey().nominal);
+            for(int j=0;j<entry.getValue();j++){
+                resList.add(v);
+            }
+
+        }
+        return String.join(",",resList);
     }
 }
