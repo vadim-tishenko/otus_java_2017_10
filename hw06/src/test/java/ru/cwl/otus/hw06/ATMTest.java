@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by vadim.tishenko
@@ -17,13 +19,21 @@ public class ATMTest {
     private CashBox box15x50;
     private CashBox box10x10;
 
+    private CashBox box1x100;
+    private CashBox box1x50;
+    private CashBox box1x10;
+
     @Before
     public void setUp() throws Exception {
         atm = new ATM();
         box20x100 = new CashBox(100, 20, 100);
         box15x50 = new CashBox(100, 15, 50);
         box10x10 = new CashBox(100, 10, 10);
-        }
+
+        box1x100 = new CashBox(100, 1, 100);
+        box1x50 = new CashBox(100, 1, 50);
+        box1x10 = new CashBox(100, 1, 10);
+    }
 
 
     @Test
@@ -104,7 +114,30 @@ public class ATMTest {
         assertThat(atm.getBalance(), is(2850-160));
 
     }
-    // TODO: 29.11.2017 Добавить обработку недостатка денег при выдаче
+
+
+    @Test
+    public void getMoney170Over() {
+        // TODO: 29.11.2017 Добавить обработку недостатка денег при выдаче
+        atm.insert(box1x100);
+        atm.insert(box1x50);
+        atm.insert(box1x10);
+
+        try {
+            String result = atm.getMoney(170);
+            fail();
+        }catch (ATMError e){
+            assertThat(e.getMessage(),is("не хватает денег"));
+        }
+
+    }
+
+    @Test
+    public void getMoneyXXX(){
+
+
+    }
+        // TODO: 30.11.2017 деньги есть(суммой) но нельзя подобрать под выдачу. есть 2х100 а нужно выдать 150
     // TODO: 29.11.2017  добавить обработку недостатка места при приеме денег
 
 }
