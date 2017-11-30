@@ -5,9 +5,9 @@ package ru.cwl.otus.hw06;
  * on 28.11.2017 21:31.
  */
 public class CashBox {
-    final int max;
-    int banknotesCount;
-    final int nominal;
+    private final int max;
+    private int banknotesCount;
+    private final int nominal;
 
     public CashBox(int max, int banknotesCount, int nominal) {
         this.max = max;
@@ -27,11 +27,19 @@ public class CashBox {
         }
     }
 
-    public int getBalance(){
-        return nominal*banknotesCount;
+    public int getBalance() {
+        return nominal * banknotesCount;
     }
 
-    public int getCount(){
+    public int getCount() {
         return banknotesCount;
+    }
+
+    public int getFreeSpace() {
+        return max - banknotesCount;
+    }
+
+    public int getNominal() {
+        return nominal;
     }
 }
