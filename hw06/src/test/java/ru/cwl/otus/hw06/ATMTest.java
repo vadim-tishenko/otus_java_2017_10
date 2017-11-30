@@ -1,12 +1,10 @@
 package ru.cwl.otus.hw06;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -55,11 +53,10 @@ public class ATMTest {
         assertThat(atm.getBalance(), is(2850));
         atm.remove(box10x10);
         assertThat(atm.getBalance(), is(2750));
-
     }
 
     @Test
-    public void putMoney() {
+    public void putMoney550() {
         atm.insert(box20x100);
         atm.insert(box15x50);
         atm.putMoney("100,100,100,100,50,100");
@@ -68,7 +65,39 @@ public class ATMTest {
         assertThat(box15x50.getCount(), is(16));
 
         assertThat(atm.getBalance(), is(3300));
+    }
 
+
+    @Test
+    public void putMoney200Overflow() {
+        // недостаточно места при приеме денег
+        atm.insert(new CashBox(5,4,100));
+
+        try {
+            atm.putMoney("100,100");
+            fail();
+        }catch (ATMError e){
+            assertThat(e.getMessage(),is("не хватает места под деньги"));
+        }
+
+        assertThat(atm.getBalance(), is(400));
+
+    }
+
+    @Test
+    public void putMoney200Overflow2() {
+        // недостаточно места при приеме денег под конкретный номинал банкнот.
+        atm.insert(new CashBox(5,5,100));
+        atm.insert(box15x50);
+
+        try {
+            atm.putMoney("100,100");
+            fail();
+        }catch (ATMError e){
+            assertThat(e.getMessage(),is("не хватает места под деньги 2"));
+        }
+
+        assertThat(atm.getBalance(), is(750+500));
     }
 
     @Test
@@ -82,7 +111,6 @@ public class ATMTest {
         assertThat(box15x50.getCount(), is(15));
         assertThat(result, is("100,100,100,100,100"));
         assertThat(atm.getBalance(), is(2250));
-
     }
 
     @Test
@@ -96,7 +124,6 @@ public class ATMTest {
         assertThat(box15x50.getCount(), is(14));
         assertThat(result, is("100,100,50"));
         assertThat(atm.getBalance(), is(2500));
-
     }
 
     @Test
@@ -112,13 +139,12 @@ public class ATMTest {
         assertThat(box10x10.getCount(), is(9));
         assertThat(result, is("100,50,10"));
         assertThat(atm.getBalance(), is(2850-160));
-
     }
 
 
     @Test
-    public void getMoney170Over() {
-        // TODO: 29.11.2017 Добавить обработку недостатка денег при выдаче
+    public void getMoney170fail() {
+        // недостаточно денег при выдаче
         atm.insert(box1x100);
         atm.insert(box1x50);
         atm.insert(box1x10);
@@ -127,17 +153,24 @@ public class ATMTest {
             String result = atm.getMoney(170);
             fail();
         }catch (ATMError e){
-            assertThat(e.getMessage(),is("не хватает денег"));
+            assertThat(e.getMessage(),is("не хватает денег для выдачи"));
         }
-
     }
 
     @Test
-    public void getMoneyXXX(){
+    public void getMoney150fail(){
+        // деньги есть(суммой) но нельзя подобрать под выдачу. есть 2х100 а нужно выдать 150
+        atm.insert(new CashBox(100, 2,100));
 
-
+        try {
+            String result = atm.getMoney(150);
+            fail();
+        }catch (ATMError e){
+            assertThat(e.getMessage(),is("не хватает денег для выдачи 2"));
+        }
+        assertThat(atm.getBalance(),is(200));
     }
-        // TODO: 30.11.2017 деньги есть(суммой) но нельзя подобрать под выдачу. есть 2х100 а нужно выдать 150
-    // TODO: 29.11.2017  добавить обработку недостатка места при приеме денег
+
+
 
 }
