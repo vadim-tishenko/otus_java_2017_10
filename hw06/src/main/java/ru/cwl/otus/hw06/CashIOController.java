@@ -23,7 +23,7 @@ public class CashIOController {
         int sum = getBanknotesSum(map);
 
         if (sum > cbs.freeSpace()) {
-            throw new ATMError("не хватает места под деньги");
+            throw new NotEnoughSpaceException("не хватает места под деньги");
         }
 
         List<CashBox> list = cbs.getCashBoxes();
@@ -42,7 +42,7 @@ public class CashIOController {
 
         int sum1 = getBanknotesSum(map);
         if (sum1 > 0) {
-            throw new ATMError("не хватает места под деньги 2");
+            throw new NotEnoughSpaceException("не хватает места под деньги 2");
         }
 
         for (Map.Entry<CashBox, Integer> entry : res.entrySet()) {
@@ -56,22 +56,22 @@ public class CashIOController {
         return map.entrySet().stream().mapToInt(entry -> entry.getKey() * entry.getValue()).sum();
     }
 
-    public String getMoney(int i) {
-        if (cbs.getBalance() < i) {
-            throw new ATMError("не хватает денег для выдачи");
+    public String getMoney(int count) {
+        if (cbs.getBalance() < count) {
+            throw new NotEnoughMoneyException("не хватает денег для выдачи");
         }
         List<CashBox> list = cbs.getCashBoxes();
         Map<CashBox, Integer> res = new LinkedHashMap<>();
         for (CashBox cb : list) {
-            int nCount = i / cb.getNominal();
+            int nCount = count / cb.getNominal();
             int n = Integer.min(nCount, cb.getCount());
             if (n != 0) {
                 res.put(cb, n);
-                i = i - n * cb.getNominal();
+                count = count - n * cb.getNominal();
             }
         }
-        if (i != 0) {
-            throw new ATMError("не хватает денег для выдачи 2");
+        if (count != 0) {
+            throw new NotEnoughMoneyException("не хватает денег для выдачи 2");
         }
 
         List<String> resList = new ArrayList<String>();

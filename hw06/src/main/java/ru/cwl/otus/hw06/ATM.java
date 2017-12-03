@@ -25,8 +25,8 @@ public class ATM {
         return io.putMoney(banknotes);
     }
 
-    public String getMoney(int i) {
-        return io.getMoney(i);
+    public String getMoney(int count) {
+        return io.getMoney(count);
     }
 
 
