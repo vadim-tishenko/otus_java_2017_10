@@ -2,6 +2,8 @@ package ru.cwl.otus.hw06;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.cwl.otus.hw06.exception.NotEnoughMoneyException;
+import ru.cwl.otus.hw06.exception.NotEnoughSpaceException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

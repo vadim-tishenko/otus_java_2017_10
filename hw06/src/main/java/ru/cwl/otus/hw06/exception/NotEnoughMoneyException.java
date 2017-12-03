@@ -1,4 +1,6 @@
-package ru.cwl.otus.hw06;
+package ru.cwl.otus.hw06.exception;
+
+import ru.cwl.otus.hw06.exception.AtmException;
 
 /**
  * Created by vadim.tishenko

@@ -1,6 +1,11 @@
 package ru.cwl.otus.hw06;
 
-import java.util.*;
+import ru.cwl.otus.hw06.exception.NotEnoughMoneyException;
+import ru.cwl.otus.hw06.exception.NotEnoughSpaceException;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vadim.tishenko
@@ -13,14 +18,9 @@ public class CashIOController {
         this.cbs = cb;
     }
 
-    public int putMoney(String banknotes) {
-        String[] arr = banknotes.split(",");
-        Map<Integer, Integer> map = new HashMap<>();
-        for (String banknote : arr) {
-            final int nominal = Integer.parseInt(banknote);
-            map.put(nominal, map.getOrDefault(nominal, 0) + 1);
-        }
-        int sum = getBanknotesSum(map);
+    public int putMoney(MoneysPack moneysPack) {
+
+        int sum = moneysPack.getSum();
 
         if (sum > cbs.freeSpace()) {
             throw new NotEnoughSpaceException("не хватает места под деньги");
@@ -31,16 +31,16 @@ public class CashIOController {
         Map<CashBox, Integer> res = new LinkedHashMap<>();
 
         for (CashBox cb : list) {
-            int n0 = map.getOrDefault(cb.getNominal(), 0);
+            int n0 = moneysPack.getOrDefault(cb.getNominal(), 0);
             if (n0 == 0) continue;
             int n = Integer.min(n0, cb.getFreeSpace());
             if (n != 0) {
                 res.put(cb, n);
-                map.put(cb.getNominal(), n0 - n);
+                moneysPack.put(cb.getNominal(), n0 - n);
             }
         }
 
-        int sum1 = getBanknotesSum(map);
+        int sum1 = moneysPack.getSum();
         if (sum1 > 0) {
             throw new NotEnoughSpaceException("не хватает места под деньги 2");
         }
@@ -52,11 +52,7 @@ public class CashIOController {
 
     }
 
-    private int getBanknotesSum(Map<Integer, Integer> map) {
-        return map.entrySet().stream().mapToInt(entry -> entry.getKey() * entry.getValue()).sum();
-    }
-
-    public String getMoney(int count) {
+    public MoneysPack getMoney(int count) {
         if (cbs.getBalance() < count) {
             throw new NotEnoughMoneyException("не хватает денег для выдачи");
         }
@@ -74,15 +70,15 @@ public class CashIOController {
             throw new NotEnoughMoneyException("не хватает денег для выдачи 2");
         }
 
-        List<String> resList = new ArrayList<String>();
+        MoneysPack result = new MoneysPack();
         for (Map.Entry<CashBox, Integer> entry : res.entrySet()) {
-            entry.getKey().sub(entry.getValue());
-            String v = String.valueOf(entry.getKey().getNominal());
-            for (int j = 0; j < entry.getValue(); j++) {
-                resList.add(v);
-            }
+            final Integer moneyValue = entry.getValue();
+            final int nominal = entry.getKey().getNominal();
+
+            entry.getKey().sub(moneyValue);
+            result.put(nominal, result.getOrDefault(nominal, 0) + moneyValue);
 
         }
-        return String.join(",", resList);
+        return result;
     }
 }
