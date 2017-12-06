@@ -3,10 +3,10 @@ package ru.cwl.otus.hw07;
 import org.junit.Before;
 import org.junit.Test;
 import ru.cwl.otus.hw06.ATM;
-import ru.cwl.otus.hw06.CashBox;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static ru.cwl.otus.hw07.AtmBuilder.atm;
 
 /**
  * Created by vadim.tishenko
@@ -19,20 +19,16 @@ public class AtmDepartmentTest {
 
     @Before
     public void setUp() {
-        atm1 = new ATM(); // 300+250+80=630
-        atm1.insert(new CashBox(100, 3, 100));
-        atm1.insert(new CashBox(100, 5, 50));
-        atm1.insert(new CashBox(100, 8, 10));
 
-        atm2 = new ATM(); // 3000+2500+800=6300
-        atm2.insert(new CashBox(100, 30, 100));
-        atm2.insert(new CashBox(100, 50, 50));
-        atm2.insert(new CashBox(100, 80, 10));
-
-        atm3 = new ATM(); // 160
-        atm3.insert(new CashBox(100, 1, 100));
-        atm3.insert(new CashBox(100, 1, 50));
-        atm3.insert(new CashBox(100, 1, 10));
+        // 300+250+80=630
+        atm1 = atm().cb(3, 100).cb(5, 50).
+                cb(8, 10).build();
+        // 3000+2500+800=6300
+        atm2 = atm().cb(30, 100).cb(50, 50).
+                cb(80, 10).build();
+        // 160
+        atm3 = atm().cb(1, 100).cb(1, 50)
+                .cb(1, 10).build();
     }
 
     @Test
@@ -66,7 +62,7 @@ public class AtmDepartmentTest {
 
     @Test // проверка сохранения состояния департамента;
     public void testSaveAndRestoreDepartState() {
-        atmDepartment.add(atm1,atm2,atm3);
+        atmDepartment.add(atm1, atm2, atm3);
         assertThat(atmDepartment.getBalance(), is(ATM_START_SUM));
 
         String memento = atmDepartment.saveToMemento();
