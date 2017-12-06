@@ -3,6 +3,7 @@ package ru.cwl.otus.hw07;
 import ru.cwl.otus.hw06.ATM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.joining;
@@ -12,7 +13,7 @@ import static java.util.stream.Collectors.joining;
  * on 05.12.2017 21:44.
  */
 public class AtmDepartment {
-    List<ATM> atmList=new ArrayList<>();
+    private List<ATM> atmList=new ArrayList<>();
     public int getBalance(){
         int result=0;
         for (ATM atm : atmList) {
@@ -20,14 +21,9 @@ public class AtmDepartment {
         }
         return result;
     }
-    void add(ATM atm){
-        atmList.add(atm);
-    }
 
     void add(ATM... atms){
-        for (ATM atm : atms) {
-            atmList.add(atm);
-        }
+        Collections.addAll(atmList, atms);
     }
 
     String saveToMemento() {
