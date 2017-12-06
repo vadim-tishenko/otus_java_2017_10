@@ -5,9 +5,9 @@ package ru.cwl.otus.hw06;
  * on 28.11.2017 21:31.
  */
 public class CashBox {
-    private final int max;
+    private int max;
     private int banknotesCount;
-    private final int nominal;
+    private int nominal;
 
     public CashBox(int max, int banknotesCount, int nominal) {
         this.max = max;
@@ -41,5 +41,16 @@ public class CashBox {
 
     public int getNominal() {
         return nominal;
+    }
+
+    String saveToMemento() {
+        return String.format("%s|%s|%s", max, banknotesCount, nominal);
+    }
+
+    void restoreFromMemento(String memento) {
+        String[] values = memento.split("\\|");
+        max=Integer.parseInt(values[0]);
+        banknotesCount=Integer.parseInt(values[1]);
+        nominal=Integer.parseInt(values[2]);
     }
 }

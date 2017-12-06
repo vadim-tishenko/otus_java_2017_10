@@ -150,5 +150,20 @@ public class ATMTest {
         assertThat(atm.getBalance(), is(200));
     }
 
+    @Test
+    public void testMemento(){
+        atm.insert(box20x100);
+        atm.insert(box15x50);
+        atm.insert(box10x10);
+
+        assertThat(2850,is(atm.getBalance()));
+        String memento=atm.saveToMemento();
+
+        atm.getMoney(1060);
+        assertThat(2850-1060,is(atm.getBalance()));
+
+        atm.restoreFromMemento(memento);
+        assertThat(2850,is(atm.getBalance()));
+    }
 
 }
