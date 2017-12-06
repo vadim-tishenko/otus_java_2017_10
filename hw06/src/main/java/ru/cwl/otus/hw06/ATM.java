@@ -13,15 +13,15 @@ public class ATM {
     CashIOController io = new CashIOController(cbs);
     BanknotesAdapter<String> adapter=new String2MapBanknotesAdapter();
 
-    void insert(CashBox cashBox) {
+    public void insert(CashBox cashBox) {
         cbs.insert(cashBox);
     }
 
-    void remove(CashBox cashBox) {
+    public void remove(CashBox cashBox) {
         cbs.remove(cashBox);
     }
 
-    int getBalance() {
+    public int getBalance() {
         return cbs.getBalance();
     }
 
