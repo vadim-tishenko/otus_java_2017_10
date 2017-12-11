@@ -1,9 +1,10 @@
 package ru.cwl.otus.hw06;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by vadim.tishenko
@@ -41,14 +42,14 @@ public class CashBoxes {
         return list;
     }
 
-    String saveToMemento() {
-        return cashBoxList.stream().map(CashBox::saveToMemento).collect(joining("||"));
+    List<CashBoxMemento> saveToMemento() {
+        return cashBoxList.stream().map(CashBox::saveToMemento).collect(toList());
     }
 
-    void restoreFromMemento(String memento) {
-        String[] values = memento.split("\\|\\|");
-        for (int i=0;i<values.length;i++) {
-            cashBoxList.get(i).restoreFromMemento(values[i]);
+    void restoreFromMemento(List<CashBoxMemento> mementos) {
+        Iterator<CashBox> iter = cashBoxList.iterator();
+        for (CashBoxMemento memento : mementos) {
+            iter.next().restoreFromMemento(memento);
         }
     }
 

@@ -1,12 +1,14 @@
 package ru.cwl.otus.hw07;
 
-import ru.cwl.otus.hw06.ATM;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-import static java.util.stream.Collectors.joining;
+import ru.cwl.otus.hw06.ATM;
+import ru.cwl.otus.hw06.AtmMemento;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by vadim.tishenko
@@ -26,14 +28,15 @@ public class AtmDepartment {
         Collections.addAll(atmList, atms);
     }
 
-    String saveToMemento() {
-        return atmList.stream().map(ATM::saveToMemento).collect(joining("\n"));
+    AtmDepartmentMemento saveToMemento() {
+        return new AtmDepartmentMemento(atmList.stream().map(ATM::saveToMemento).collect(toList()));
     }
 
-    void restoreFromMemento(String memento) {
-        String[] values = memento.split("\\n");
-        for (int i=0;i<values.length;i++) {
-            atmList.get(i).restoreFromMemento(values[i]);
+    void restoreFromMemento(AtmDepartmentMemento memento) {
+        Iterator<ATM> atmIterator = atmList.iterator();
+        for (AtmMemento atmMemento : memento.atmMementos) {
+            atmIterator.next().restoreFromMemento(atmMemento);
+
         }
     }
 }

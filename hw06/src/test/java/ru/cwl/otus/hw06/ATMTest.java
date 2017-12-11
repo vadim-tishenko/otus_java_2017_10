@@ -1,5 +1,7 @@
 package ru.cwl.otus.hw06;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import ru.cwl.otus.hw06.exception.NotEnoughMoneyException;
@@ -23,7 +25,7 @@ public class ATMTest {
     private CashBox box1x10;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         atm = new ATM();
         box20x100 = new CashBox(100, 20, 100);
         box15x50 = new CashBox(100, 15, 50);
@@ -36,16 +38,7 @@ public class ATMTest {
 
 
     @Test
-    public void insert() throws Exception {
-
-    }
-
-    @Test
-    public void remove() throws Exception {
-    }
-
-    @Test
-    public void getBalance() throws Exception {
+    public void getBalance()  {
         assertThat(atm.getBalance(), is(0));
         atm.insert(box20x100);
         assertThat(atm.getBalance(), is(2000));
@@ -157,7 +150,7 @@ public class ATMTest {
         atm.insert(box10x10);
 
         assertThat(2850,is(atm.getBalance()));
-        String memento=atm.saveToMemento();
+        AtmMemento memento = atm.saveToMemento();
 
         atm.getMoney(1060);
         assertThat(2850-1060,is(atm.getBalance()));

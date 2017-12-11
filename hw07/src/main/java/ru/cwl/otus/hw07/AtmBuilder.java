@@ -12,27 +12,23 @@ import ru.cwl.otus.hw06.CashBox;
  * on 06.12.2017 22:15.
  */
 public class AtmBuilder {
-    List<Pair<Integer, Integer>> sss = new ArrayList<>();
-
-   /* public static AtmBuilder atm() {
-        return new AtmBuilder();
-    }*/
+    private List<Pair<Integer, Integer>> cashBoxParams = new ArrayList<>();
 
     public AtmBuilder clear() {
-        sss.clear();
+        cashBoxParams.clear();
         return this;
     }
 
     public AtmBuilder cb(int banknotesCount, int nominal) {
-        sss.add(new Pair<>(banknotesCount, nominal));
+        cashBoxParams.add(new Pair<>(banknotesCount, nominal));
 
         return this;
     }
 
     public ATM build() {
         ATM atm = new ATM();
-        for (Pair<Integer, Integer> ss : sss) {
-            atm.insert(new CashBox(100, ss.getKey(), ss.getValue()));
+        for (Pair<Integer, Integer> pair : cashBoxParams) {
+            atm.insert(new CashBox(100, pair.getKey(), pair.getValue()));
         }
         return atm;
     }

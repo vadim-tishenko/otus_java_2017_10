@@ -43,14 +43,13 @@ public class CashBox {
         return nominal;
     }
 
-    String saveToMemento() {
-        return String.format("%s|%s|%s", max, banknotesCount, nominal);
+    CashBoxMemento saveToMemento() {
+        return new CashBoxMemento(max, banknotesCount, nominal);
     }
 
-    void restoreFromMemento(String memento) {
-        String[] values = memento.split("\\|");
-        max=Integer.parseInt(values[0]);
-        banknotesCount=Integer.parseInt(values[1]);
-        nominal=Integer.parseInt(values[2]);
+    void restoreFromMemento(CashBoxMemento memento) {
+        max = memento.max;
+        banknotesCount = memento.banknotesCount;
+        nominal = memento.nominal;
     }
 }

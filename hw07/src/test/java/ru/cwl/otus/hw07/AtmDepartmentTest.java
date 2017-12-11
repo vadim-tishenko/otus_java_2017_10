@@ -65,7 +65,7 @@ public class AtmDepartmentTest {
         atmDepartment.add(atm1, atm2, atm3);
         assertThat(atmDepartment.getBalance(), is(ATM_START_SUM));
 
-        String memento = atmDepartment.saveToMemento();
+        AtmDepartmentMemento memento = atmDepartment.saveToMemento();
 
 
         atm1.getMoney(500);

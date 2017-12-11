@@ -33,12 +33,12 @@ public class ATM {
         return adapter.to(io.getMoney(count));
     }
 
-    public String saveToMemento(){
-        return cbs.saveToMemento();
+    public AtmMemento saveToMemento(){
+        return new AtmMemento(cbs.saveToMemento());
     }
 
-    public void restoreFromMemento(String memento){
-        cbs.restoreFromMemento(memento);
+    public void restoreFromMemento(AtmMemento memento){
+        cbs.restoreFromMemento(memento.cashBoxMementos);
     }
 
 
