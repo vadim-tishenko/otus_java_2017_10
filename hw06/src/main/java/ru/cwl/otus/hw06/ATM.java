@@ -9,7 +9,7 @@ import ru.cwl.otus.hw06.adapter.String2MapBanknotesAdapter;
  */
 public class ATM {
 
-    CashBoxes cbs = new CashBoxes();
+    protected CashBoxes cbs = new CashBoxes();
     CashIOController io = new CashIOController(cbs);
     BanknotesAdapter<String> adapter=new String2MapBanknotesAdapter();
 

@@ -42,11 +42,11 @@ public class CashBoxes {
         return list;
     }
 
-    List<CashBoxMemento> saveToMemento() {
+    public List<CashBoxMemento> saveToMemento() {
         return cashBoxList.stream().map(CashBox::saveToMemento).collect(toList());
     }
 
-    void restoreFromMemento(List<CashBoxMemento> mementos) {
+    public void restoreFromMemento(List<CashBoxMemento> mementos) {
         Iterator<CashBox> iter = cashBoxList.iterator();
         for (CashBoxMemento memento : mementos) {
             iter.next().restoreFromMemento(memento);
