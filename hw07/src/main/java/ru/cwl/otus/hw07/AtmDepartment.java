@@ -17,11 +17,7 @@ import static java.util.stream.Collectors.toList;
 public class AtmDepartment {
     private List<ATM> atmList=new ArrayList<>();
     public int getBalance(){
-        int result=0;
-        for (ATM atm : atmList) {
-            result+=atm.getBalance();
-        }
-        return result;
+        return atmList.stream().mapToInt(ATM::getBalance).sum();
     }
 
     void add(ATM... atms){
@@ -36,7 +32,6 @@ public class AtmDepartment {
         Iterator<ATM> atmIterator = atmList.iterator();
         for (AtmMemento atmMemento : memento.atmMementos) {
             atmIterator.next().restoreFromMemento(atmMemento);
-
         }
     }
 }
