@@ -6,7 +6,6 @@ import ru.cwl.otus.hw06.ATM;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static ru.cwl.otus.hw07.AtmBuilder.atm;
 
 /**
  * Created by vadim.tishenko
@@ -14,6 +13,7 @@ import static ru.cwl.otus.hw07.AtmBuilder.atm;
  */
 public class AtmDepartmentTest {
     private static final int ATM_START_SUM = 630 + 6300 + 160;
+    private AtmBuilder atmBuilder=new AtmBuilder();
     private AtmDepartment atmDepartment = new AtmDepartment();
     private ATM atm1, atm2, atm3;
 
@@ -21,13 +21,13 @@ public class AtmDepartmentTest {
     public void setUp() {
 
         // 300+250+80=630
-        atm1 = atm().cb(3, 100).cb(5, 50).
+        atm1 = atmBuilder.cb(3, 100).cb(5, 50).
                 cb(8, 10).build();
         // 3000+2500+800=6300
-        atm2 = atm().cb(30, 100).cb(50, 50).
+        atm2 = atmBuilder.clear().cb(30, 100).cb(50, 50).
                 cb(80, 10).build();
         // 160
-        atm3 = atm().cb(1, 100).cb(1, 50)
+        atm3 = atmBuilder.clear().cb(1, 100).cb(1, 50)
                 .cb(1, 10).build();
     }
 
