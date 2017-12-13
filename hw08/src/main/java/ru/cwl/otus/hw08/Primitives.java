@@ -9,5 +9,8 @@ public class Primitives {
     public long l;
     public double d;
     public float f;
+    public boolean boolTrue=true;
+    public boolean boolFalse=false;
+    public Object nullValue=null;
 
 }
