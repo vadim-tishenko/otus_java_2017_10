@@ -13,4 +13,6 @@ public class Primitives {
     public boolean boolFalse=false;
     public Object nullValue=null;
 
+    public int[]intArray={0,1,2,3,4,5};
+
 }
