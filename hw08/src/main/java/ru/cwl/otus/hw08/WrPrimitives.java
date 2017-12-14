@@ -12,6 +12,7 @@ public class WrPrimitives {
     public Boolean boolTrue=true;
     public Boolean boolFalse=false;
     public Object nullValue=null;
-    public Integer[] intArray={0,1,2,3,4,5};
+    public Integer[] intArray={1000,2000,3000,4000,5000,6000};
+    public String str="The String";
 
 }
