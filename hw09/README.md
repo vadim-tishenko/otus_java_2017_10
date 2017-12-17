@@ -1,4 +1,5 @@
-# ДЗ-09: myORM. Создайте в базе таблицу с полями: 
+# ДЗ-09: 
+myORM. Создайте в базе таблицу с полями: 
 id bigint(20) NOT NULL auto_increment 
 name varchar(255)
 age int(3)
