@@ -15,7 +15,8 @@ public class DBExecutor {
     <T extends DataSet> void save(T user) {
         try {
             Statement stt = connection.createStatement();
-            stt.execute("");
+            String insert_sql="";
+            stt.execute(insert_sql);
             ResultSet resultSet = stt.getResultSet();
 
 
@@ -28,10 +29,17 @@ public class DBExecutor {
     <T extends DataSet> T load(long id, Class<T> clazz) {
         try {
             T result=clazz.newInstance();
+            Statement st = connection.createStatement();
+            String select_sql = "";
+            st.execute(select_sql);
+            ResultSet rs = st.getResultSet();
+
 
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         //    …
