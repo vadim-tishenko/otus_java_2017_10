@@ -18,30 +18,20 @@ public class Main {
 
         Class.forName("org.h2.Driver");
         Connection conn = DriverManager.getConnection("jdbc:h2:~/test;AUTO_SERVER=TRUE");
-        UserDbService db=new UserDbService(conn);
 
+        UserDbService db=new UserDbService(conn);
 
         UserDataSet uds=new UserDataSet();
         uds.name="User Name";
         uds.age=33;
 
-
         db.save(uds);
 
-
         List<UserDataSet> list = db.load(UserDataSet.class);
-
         System.out.println(list);
-
 
         UserDataSet aa = db.load(1, null);
         System.out.println(aa);
-
-
-
-
-
-
 
         conn.close();
     }
