@@ -7,4 +7,13 @@ package ru.cwl.otus.hw09;
 public class UserDataSet extends DataSet {
     String name;
     int age;
+
+    @Override
+    public String toString() {
+        return "UserDataSet{" + "id=" + id +
+                ",name='" + name + '\'' +
+                ", age=" + age +
+
+                '}';
+    }
 }

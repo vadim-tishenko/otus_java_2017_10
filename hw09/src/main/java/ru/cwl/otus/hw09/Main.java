@@ -1,6 +1,7 @@
 package ru.cwl.otus.hw09;
 
 import java.sql.*;
+import java.util.List;
 
 /**
  * Created by vadim.tishenko
@@ -14,24 +15,33 @@ public class Main {
             "  age int(3)"+
             ");";
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
         Class.forName("org.h2.Driver");
         Connection conn = DriverManager.getConnection("jdbc:h2:~/test;AUTO_SERVER=TRUE");
-        Statement statement = conn.createStatement();
+        UserDbService db=new UserDbService(conn);
 
-        statement.executeQuery("SELECT * FROM TEST_USER");
-        ResultSet rs = statement.getResultSet();
-        while (rs.next()) {
-            System.out.printf("%s %s %s\n", rs.getLong("id"),
-                    rs.getString("name"), rs.getInt("age"));
-        }
 
-    /*    List<String> names = new ArrayList<>();
+        UserDataSet uds=new UserDataSet();
+        uds.name="User Name";
+        uds.age=33;
 
-        while (!result.isLast()) {
-            result.next();
-            names.add(result.getString("name"));
-        }
-        return names;*/
+
+        db.save(uds);
+
+
+        List<UserDataSet> list = db.load(UserDataSet.class);
+
+        System.out.println(list);
+
+
+        UserDataSet aa = db.load(1, null);
+        System.out.println(aa);
+
+
+
+
+
+
 
         conn.close();
     }
