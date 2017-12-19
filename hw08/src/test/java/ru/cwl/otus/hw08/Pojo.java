@@ -8,7 +8,7 @@ import java.util.List;
  * on 14.12.2017 23:40.
  */
 public class Pojo {
-    Pojo() {
+    public Pojo() {
     }
 
     public List<String> list = new ArrayList<>();
