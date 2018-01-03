@@ -39,6 +39,17 @@ public class Main {
         UserDataSet aa2 = db.load(1, UserDataSet.class);
         System.out.println(aa2);
 
+        BankAccount ba1 =new BankAccount("visa 1",100);
+        BankAccount ba2 =new BankAccount("mastercard 2",300);
+
+        db.registerEntityClass(BankAccount.class);
+        db.save(ba1);
+        db.save(ba2);
+        BankAccount ba3 = db.load(2, BankAccount.class);
+
+        System.out.println(ba3);
+        System.out.println(db.load(BankAccount.class));
+
         conn.close();
     }
 }
