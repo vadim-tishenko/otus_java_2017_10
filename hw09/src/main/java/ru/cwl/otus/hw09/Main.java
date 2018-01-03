@@ -20,15 +20,14 @@ public class Main {
         db.registerEntityClass(UserDataSet.class);
 
         UserDataSet uds = new UserDataSet();
-        uds.name = "User Name";
-        uds.age = 33;
+        uds.name = "Name 1";
+        uds.age = 11;
         UserDataSet uds2 = new UserDataSet();
-        uds2.name = "User Name 2";
-        uds2.age = 43;
+        uds2.name = "User 2";
+        uds2.age = 22;
         UserDataSet uds3 = new UserDataSet();
-        uds3.name = "User Name 3";
-        uds3.age = 23;
-
+        uds3.name = "User 3";
+        uds3.age = 33;
 
         db.save(uds);
         db.save(uds2);

@@ -1,10 +1,9 @@
 package ru.cwl.otus.hw09;
 
 
-import sun.reflect.misc.FieldUtil;
 import sun.reflect.misc.MethodUtil;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,15 +17,22 @@ import java.util.List;
  */
 public class SQLGenerator {
     Class<? extends DataSet> clazz;
-    Field[] fields;
     Method[] methods;
-    List<FieldMapping> mappings = new ArrayList<>();
+    List<PropertyMapping> mappings = new ArrayList<>();
+
 
     public SQLGenerator(Class<? extends DataSet> userDataSetClass) {
         clazz = userDataSetClass;
-        fields = FieldUtil.getDeclaredFields(clazz);
         methods = MethodUtil.getMethods(clazz);
         refreshColumnMapping();
+    }
+
+    DataSet newInst(){
+        try {
+            return  clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+           throw new RuntimeException(e);
+        }
     }
 
     String getTableName() {
@@ -40,82 +46,72 @@ public class SQLGenerator {
 
     String[] getColumnNames() {
 
-      ArrayList<String> methodList = new ArrayList<>();
-        for (FieldMapping mapping : mappings) {
+        ArrayList<String> methodList = new ArrayList<>();
+        for (PropertyMapping mapping : mappings) {
             methodList.add(mapping.name);
         }
 
         return methodList.toArray(new String[]{});
     }
 
-    void refreshColumnMapping() {
+    private void refreshColumnMapping() {
 
         for (Method method : methods) {
             if (method.getName().startsWith("get")) {
                 if (method.getName().equals("getClass")) continue;
                 final String fieldName = method.getName().substring(3).toUpperCase();
-                FieldMapping fm = new FieldMapping();
+                PropertyMapping fm = new PropertyMapping();
                 fm.name = fieldName;
                 fm.getter = method;
                 mappings.add(fm);
             }
         }
 
-        for (FieldMapping m : mappings) {
+        for (PropertyMapping m : mappings) {
             if (m.name.equals("ID")) {
                 m.sqlType = "BIGINT IDENTITY NOT NULL PRIMARY KEY";
                 findSetter(m);
                 continue;
             }
-            switch (m.getter.getReturnType().getSimpleName()){
+            switch (m.getter.getReturnType().getSimpleName()) {
                 case "String":
-                    m.sqlType="VARCHAR(255)";
+                    m.sqlType = "VARCHAR(255)";
                     break;
                 case "Integer":
                 case "int":
-                    m.sqlType="INTEGER";
+                    m.sqlType = "INTEGER";
                     break;
                 default:
-                    m.sqlType="UNKNOWN_"+m.getter.getReturnType().getSimpleName();
+                    m.sqlType = "UNKNOWN_" + m.getter.getReturnType().getSimpleName();
             }
 
             findSetter(m);
         }
 
-        mappings.sort(Comparator.comparing(FieldMapping::getName));
+        mappings.sort(Comparator.comparing(PropertyMapping::getName));
 
     }
 
-    private void findSetter(FieldMapping m) {
+    private void findSetter(PropertyMapping m) {
         String getterName = m.getter.getName();
         String setterName = "set" + getterName.substring(3);
 
         for (Method method : methods) {
-            if(method.getName().equals(setterName)){
-                m.setter=method;
+            if (method.getName().equals(setterName)) {
+                m.setter = method;
                 break;
             }
         }
     }
 
     String getCreateTable() {
-/*        String qq = "CREATE TABLE USERS (" +
-                "AGE INTEGER, " +
-                "ID BIGINT IDENTITY NOT NULL PRIMARY KEY, " +
-                "NAME VARCHAR(255)" +
-                " )";
-        String z = "CREATE TABLE USERS\n" +
-                "(\n" +
-                "  ID   BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_CB481AEE_15B5_4973_8B68_DDE50FC8D42C) AUTO_INCREMENT NOT NULL,\n" +
-                "  NAME VARCHAR(255),\n" +
-                "  AGE  INTEGER\n" +
-                ")";*/
-
-        boolean first=true;
+        boolean first = true;
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE ").append(getTableName()).append(" (");
-        for (FieldMapping mapping : mappings) {
-            if(!first){ sb.append(", ");}else first=false;
+        for (PropertyMapping mapping : mappings) {
+            if (!first) {
+                sb.append(", ");
+            } else first = false;
             sb.append(mapping.name).append(' ').append(mapping.sqlType);
         }
 
@@ -126,6 +122,7 @@ public class SQLGenerator {
     String getDropTable() {
         return "DROP TABLE " + getTableName();
     }
+
     String getDropTableIfExists() {
         return "DROP TABLE IF EXISTS " + getTableName();
     }
@@ -143,11 +140,27 @@ public class SQLGenerator {
     }
 }
 
-class FieldMapping {
+class PropertyMapping {
     String name;
     String sqlType;
     Method getter;
     Method setter;
+
+    Object getValue(Object t) {
+        try {
+            return getter.invoke(t);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    <G extends DataSet> void setValue(G t, Object value) {
+        try {
+            setter.invoke(t,value);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public String getName() {
         return name;

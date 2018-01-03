@@ -1,6 +1,5 @@
 package ru.cwl.otus.hw09;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -20,7 +19,7 @@ public class DbService {
         entityClasses = new IdentityHashMap<>();
     }
 
-    protected <T> void  createTable(Class<T> clazz) {
+    protected <T extends DataSet> void createTable(Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
         try {
             PreparedStatement ps = connection.prepareStatement(gen.getCreateTable());
@@ -30,7 +29,7 @@ public class DbService {
         }
     }
 
-    protected <T> void dropTable(Class<T> clazz) {
+    protected <T extends DataSet> void dropTable(Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
         try {
             PreparedStatement ps = connection.prepareStatement(gen.getDropTable());
@@ -40,7 +39,7 @@ public class DbService {
         }
     }
 
-    protected <T> void dropTableIfExists(Class<T> clazz) {
+    protected <T extends DataSet> void dropTableIfExists(Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
         try {
             PreparedStatement ps = connection.prepareStatement(gen.getDropTableIfExists());
@@ -50,44 +49,39 @@ public class DbService {
         }
     }
 
-    public <T> void save(T t) {
+    public <T extends DataSet> void save(T t) {
 
         SQLGenerator gen = entityClasses.get(t.getClass());
         try {
             String insertSql = gen.getInsert();
             PreparedStatement st = connection.prepareStatement(insertSql);
-
             fillPS(st, t);
-
             st.execute();
-
-
         } catch (SQLException e) {
-            e.printStackTrace();
+           throw new RuntimeException(e);
         }
-        //    …
     }
 
-     private  <T> void fillPS(PreparedStatement st, T t) {
-         SQLGenerator gen = entityClasses.get(t.getClass());
+    private <T extends DataSet> void fillPS(PreparedStatement st, T t) {
+        SQLGenerator gen = entityClasses.get(t.getClass());
 
-         int i = 0;
-        for (FieldMapping mapping : gen.mappings) {
+        int i = 0;
+        for (PropertyMapping mapping : gen.mappings) {
             i++;
-            try {if(mapping.name.equals("ID")){
-                st.setObject(i, null);
-
-            }else {
-                st.setObject(i, mapping.getter.invoke(t));
-            }
-            } catch (SQLException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+            try {
+                if (mapping.name.equals("ID")) {
+                    st.setObject(i, null);
+                } else {
+                    st.setObject(i, mapping.getValue(t));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
 
     }
 
-    public <T> T load(long id, Class<T> clazz) {
+    public <T extends DataSet> T load(long id, Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
 
         String selectByIdSql = gen.getSelectById();
@@ -97,31 +91,30 @@ public class DbService {
             st.executeQuery();
             ResultSet rs = st.getResultSet();
             if (rs.next()) {
-                return map(rs,clazz);
+                return map(rs, clazz);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return null;
     }
 
-    protected <T> T map(ResultSet rs,Class<T> clazz) {
+    protected <T extends DataSet> T map(ResultSet rs, Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
 
         try {
-            T t = clazz.newInstance();
-            for (FieldMapping mapping : gen.mappings) {
+            DataSet t = gen.newInst();
+            for (PropertyMapping mapping : gen.mappings) {
                 Object fieldValue = rs.getObject(mapping.name);
-                mapping.setter.invoke(t,fieldValue);
+                mapping.setValue(t, fieldValue);
             }
-            return t;
-        } catch (InstantiationException | IllegalAccessException | SQLException | InvocationTargetException e) {
-            e.printStackTrace();
+            return (T) t;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
-    public <T> List<T> load(Class<T> clazz) {
+    public <T extends DataSet> List<T> load(Class<T> clazz) {
         SQLGenerator gen = entityClasses.get(clazz);
 
         List<T> resultList = new ArrayList<T>();
@@ -130,16 +123,18 @@ public class DbService {
             st.execute(selectSql);
             ResultSet rs = st.getResultSet();
             while (rs.next()) {
-                resultList.add(map(rs,clazz));
+                resultList.add(map(rs, clazz));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return resultList;
     }
 
     public void registerEntityClass(Class<? extends DataSet> dataSetClass) {
-        entityClasses.put(dataSetClass,new SQLGenerator(dataSetClass));
+        entityClasses.put(dataSetClass, new SQLGenerator(dataSetClass));
+
+        // strategy - drop & create
         dropTableIfExists(dataSetClass);
         createTable(dataSetClass);
     }
