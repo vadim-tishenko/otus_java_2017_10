@@ -1,5 +1,6 @@
 package ru.cwl.otus.hw10;
 
+import ru.cwl.otus.hw10.model.AddressDataSet;
 import ru.cwl.otus.hw10.model.UserDataSet;
 
 import java.util.List;
@@ -13,16 +14,15 @@ public class Main {
 
         DBService dbService = new DBServiceHibernateImpl();
 
-        UserDataSet uds = new UserDataSet();
-        uds.setName("Name 1");
-        uds.setAge(11);
-        UserDataSet uds2 = new UserDataSet();
-        uds2.setName("User 2");
-        uds2.setAge(22);
-        UserDataSet uds3 = new UserDataSet();
-        uds3.setName("User 3");
-        uds3.setAge(33);
+        UserDataSet uds = new UserDataSet("Name 1",11);
+        AddressDataSet a1=new AddressDataSet("kovalevskaya",10);
+        uds.setAddress(a1);
 
+        UserDataSet uds2 = new UserDataSet("User 2",22);
+
+        UserDataSet uds3 = new UserDataSet("User 3",33);
+
+        dbService.save(a1);
         dbService.save(uds);
         dbService.save(uds2);
         dbService.save(uds3);

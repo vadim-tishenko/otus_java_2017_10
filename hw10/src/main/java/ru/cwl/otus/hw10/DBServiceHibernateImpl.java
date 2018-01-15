@@ -2,6 +2,7 @@ package ru.cwl.otus.hw10;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import ru.cwl.otus.hw10.model.DataSet;
 
 import java.util.List;
@@ -34,8 +35,8 @@ public class DBServiceHibernateImpl implements DBService {
     @Override
     public <T extends DataSet> List<T> load(Class<T> clazz) {
         Session s = sf.openSession();
-
-        List<T> result = null;//s. ;
+        Query<T> a = s.createQuery("select o from "+clazz.getSimpleName()+" o", clazz);
+        List<T> result = a.getResultList() ;
         s.close();
         return result;
     }

@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import ru.cwl.otus.hw10.model.AddressDataSet;
+import ru.cwl.otus.hw10.model.PhoneDataSet;
 import ru.cwl.otus.hw10.model.UserDataSet;
 
 /**
@@ -18,6 +20,8 @@ public class SF {
 
 
         configuration.addAnnotatedClass(UserDataSet.class);
+        configuration.addAnnotatedClass(AddressDataSet.class);
+        configuration.addAnnotatedClass(PhoneDataSet.class);
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
@@ -29,7 +33,7 @@ public class SF {
         //configuration.setProperty("hibernate.use_sql_comments","true");
         //configuration.setProperty("hibernate.format_sql","true");
 
-        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
         //configuration.setProperty("hibernate.connection.useSSL", "false");
         configuration.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 

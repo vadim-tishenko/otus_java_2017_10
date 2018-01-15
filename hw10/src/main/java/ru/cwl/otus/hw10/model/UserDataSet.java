@@ -1,6 +1,8 @@
 package ru.cwl.otus.hw10.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by vadim.tishenko
@@ -15,9 +17,20 @@ public class UserDataSet implements DataSet {
     long id;
     String name;
     int age;
-    @Embedded
+    @OneToOne
     AddressDataSet address;
-    //Set<PhoneDataSet> phones;
+
+    @OneToMany
+    Set<PhoneDataSet> phones = new HashSet<PhoneDataSet>();
+
+
+    public UserDataSet() {
+    }
+
+    public UserDataSet(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 
     public long getId() {
         return id;
@@ -50,12 +63,23 @@ public class UserDataSet implements DataSet {
     public void setAddress(AddressDataSet address) {
         this.address = address;
     }
-  
-    /*public Set<PhoneDataSet> getPhones() {
+
+    public Set<PhoneDataSet> getPhones() {
         return phones;
     }
 
     public void setPhones(Set<PhoneDataSet> phones) {
         this.phones = phones;
-    }*/
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", address=" + address +
+                ", phones=" + phones +
+                '}';
+    }
 }
