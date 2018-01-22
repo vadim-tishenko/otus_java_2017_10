@@ -20,7 +20,7 @@ public class UserDataSet implements DataSet {
     @OneToOne
     AddressDataSet address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<PhoneDataSet> phones = new HashSet<PhoneDataSet>();
 
 
@@ -68,9 +68,20 @@ public class UserDataSet implements DataSet {
         return phones;
     }
 
+    public void addPhone(PhoneDataSet phone){
+        phones.add(phone);
+        phone.setUser(this);
+    }
+
+    public void removePhone(PhoneDataSet phone){
+        phones.remove(phone);
+    }
+
     public void setPhones(Set<PhoneDataSet> phones) {
         this.phones = phones;
     }
+
+
 
     @Override
     public String toString() {
