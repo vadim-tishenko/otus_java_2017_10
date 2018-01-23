@@ -27,7 +27,6 @@ public class Main {
 
         UserDataSet uds3 = new UserDataSet("User 3",33);
 
-        dbService.save(a1);
         dbService.save(uds);
         dbService.save(uds2);
         dbService.save(uds3);

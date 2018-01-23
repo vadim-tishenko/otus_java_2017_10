@@ -17,7 +17,7 @@ public class UserDataSet implements DataSet {
     long id;
     String name;
     int age;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     AddressDataSet address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
