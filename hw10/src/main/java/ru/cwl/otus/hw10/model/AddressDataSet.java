@@ -7,11 +7,8 @@ import javax.persistence.*;
  * on 04.01.2018 13:54.
  */
 @Entity
-public class AddressDataSet implements DataSet{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-
+@Table(name = "ADDRESSES")
+public class AddressDataSet extends DataSet{
     private String street;
     private Integer houseNum;
 
@@ -37,14 +34,6 @@ public class AddressDataSet implements DataSet{
 
     public void setHouseNum(Integer houseNum) {
         this.houseNum = houseNum;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     @Override

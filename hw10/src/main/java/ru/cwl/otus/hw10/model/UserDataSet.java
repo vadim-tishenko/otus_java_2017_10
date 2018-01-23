@@ -11,10 +11,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
-public class UserDataSet implements DataSet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+public class UserDataSet extends DataSet {
+
     String name;
     int age;
     @OneToOne(cascade = CascadeType.ALL)
@@ -30,14 +28,6 @@ public class UserDataSet implements DataSet {
     public UserDataSet(String name, int age) {
         this.name = name;
         this.age = age;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

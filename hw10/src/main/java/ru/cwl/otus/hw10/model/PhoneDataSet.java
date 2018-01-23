@@ -7,10 +7,8 @@ import javax.persistence.*;
  * on 04.01.2018 13:55.
  */
 @Entity
-public class PhoneDataSet implements DataSet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+@Table(name = "PHONES")
+public class PhoneDataSet extends DataSet {
     private String number;
     @ManyToOne
     @JoinColumn(name = "User_ID")
@@ -21,16 +19,6 @@ public class PhoneDataSet implements DataSet {
 
     public PhoneDataSet(String number) {
         this.number = number;
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNumber() {

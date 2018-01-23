@@ -1,8 +1,9 @@
-package ru.cwl.otus.hw10;
+package ru.cwl.otus.hw10.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import ru.cwl.otus.hw10.DBService;
 import ru.cwl.otus.hw10.model.DataSet;
 
 import java.util.List;
