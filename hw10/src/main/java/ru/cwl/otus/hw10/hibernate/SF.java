@@ -1,4 +1,4 @@
-package ru.cwl.otus.hw10;
+package ru.cwl.otus.hw10.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -27,7 +27,6 @@ public class SF {
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:h2:~/db_hw10;AUTO_SERVER=TRUE");
         configuration.setProperty("hibernate.connection.username", "sa");
-        //configuration.setProperty("hibernate.connection.password", "tully");
         configuration.setProperty("hibernate.show_sql", "true");
 
         //configuration.setProperty("hibernate.use_sql_comments","true");

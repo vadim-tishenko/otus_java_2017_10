@@ -11,16 +11,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
-public class UserDataSet implements DataSet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+public class UserDataSet extends DataSet {
+
     String name;
     int age;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     AddressDataSet address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<PhoneDataSet> phones = new HashSet<PhoneDataSet>();
 
 
@@ -30,14 +28,6 @@ public class UserDataSet implements DataSet {
     public UserDataSet(String name, int age) {
         this.name = name;
         this.age = age;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -68,9 +58,20 @@ public class UserDataSet implements DataSet {
         return phones;
     }
 
+    public void addPhone(PhoneDataSet phone){
+        phones.add(phone);
+        phone.setUser(this);
+    }
+
+    public void removePhone(PhoneDataSet phone){
+        phones.remove(phone);
+    }
+
     public void setPhones(Set<PhoneDataSet> phones) {
         this.phones = phones;
     }
+
+
 
     @Override
     public String toString() {
