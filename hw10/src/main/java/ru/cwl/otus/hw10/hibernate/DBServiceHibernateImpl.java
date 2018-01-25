@@ -2,6 +2,7 @@ package ru.cwl.otus.hw10.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import ru.cwl.otus.hw10.DBService;
 import ru.cwl.otus.hw10.model.DataSet;
@@ -20,9 +21,15 @@ public class DBServiceHibernateImpl implements DBService {
 
     @Override
     public <T extends DataSet> void save(T user) {
-        Session s = sf.openSession();
-        s.save(user);
-        s.close();
+        Transaction tx=null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            session.save(user);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        }
     }
 
     @Override
