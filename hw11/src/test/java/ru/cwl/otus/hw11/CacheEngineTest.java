@@ -26,7 +26,7 @@ public class CacheEngineTest {
     }
 
     @Test
-    public void get() {
+    public void testEmptyCache() {
         String res = cache.get("key");
         assertThat(res, equalTo(null));
         assertThat(cache.getHitCount(), is(0L));
@@ -34,57 +34,48 @@ public class CacheEngineTest {
     }
 
     @Test
-    public void testEvictOnSize() {
-        cache.put("A","aa");
-        cache.put("B","bb");
-        cache.put("C","cc");
-        cache.put("D","dd");
-        cache.put("E","ee");
-        assertThat(cache.size(),is(5));
-        cache.put("F","ff");
-        assertThat(cache.size(),is(5));
+    public void testEvictOnSizeOverflow() {
+        cache.put("A", "aa");
+        cache.put("B", "bb");
+        cache.put("C", "cc");
+        cache.put("D", "dd");
+        cache.put("E", "ee");
+        assertThat(cache.size(), is(5));
+        cache.put("F", "ff");
+        assertThat(cache.size(), is(5));
     }
 
     @Test
-    public void testEvictOnMaxLifeTime() throws InterruptedException {
-        cache=new CacheEngine<>(5,100,0,false);
-        cache.put("A","aa");
+    public void testEvictAfterIdleTimeExpired() throws InterruptedException {
+        cache = new CacheEngine<>(5, 0, 100, false);
+        cache.put("A", "aa");
         String res = cache.get("A");
-        assertThat(res,is("aa"));
-        Thread.sleep(105);
-        String res2=cache.get("A");
-        assertThat(res2,equalTo(null));
-
-    }
-
-    @Test
-    public void testEvictOnIdleTime() throws InterruptedException {
-        cache=new CacheEngine<>(5,0,100,false);
-        cache.put("A","aa");
-        String res = cache.get("A");
-        assertThat(res,is("aa"));
-        for(int i=0;i<10;i++) {
-            Thread.sleep(50);
-            System.out.println(i);
-            assertThat(cache.get("A"),is("aa"));
+        assertThat(res, is("aa"));
+        for (int i = 0; i < 20; i++) {
+            Thread.sleep(40);
+            assertThat(cache.get("A"), is("aa"));
         }
-        assertThat(cache.get("A"),is("aa"));
-        System.out.println("hc:"+cache.getHitCount());
-        Thread.sleep(250);
-        assertThat(cache.get("A"),equalTo(null));
-
-
+        assertThat(cache.getHitCount(), is(21l));
+        //expired....
+        Thread.sleep(220);
+        assertThat(cache.get("A"), equalTo(null));
     }
 
-    //@Test
-    public void getHitCount() {
+    @Test
+    public void testEvictAfterLifeTimeExpired() throws InterruptedException {
+        cache = new CacheEngine<>(5, 100, 0, false);
+        cache.put("A", "aa");
+        assertThat(cache.get("A"), is("aa"));
+        Thread.sleep(40);
+        assertThat(cache.get("A"), is("aa"));
+        Thread.sleep(40);
+        assertThat(cache.get("A"), is("aa"));
+        Thread.sleep(40);
+        assertThat(cache.get("A"), equalTo(null));
+
+        assertThat(cache.getHitCount(), is(3L));
+        assertThat(cache.getMisCount(), is(1L));
     }
 
-    //@Test
-    public void getMisCount() {
-    }
 
-    //@Test
-    public void dispoze() {
-    }
 }
