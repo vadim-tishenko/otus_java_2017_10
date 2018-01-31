@@ -46,7 +46,6 @@ public class CacheEngine<K, V> {
         V value = entry.get();
         if (value != null) {
             hitCount++;
-            entry.lastAccessTime = System.currentTimeMillis();
         } else {
             misCount++;
             map.remove(key);
@@ -57,7 +56,7 @@ public class CacheEngine<K, V> {
     void put(K key, V value) {
         Entry<K, V> entry = new Entry<>(key, value);
         if (size() >= maxSize) {
-            // удалить любой.
+            // при переполнении - удаляем первый.
             Set<K> keys = map.keySet();
             K anyKey = keys.iterator().next();
             map.remove(anyKey);
@@ -71,7 +70,7 @@ public class CacheEngine<K, V> {
         }
         if (maxIdleTimeMs != 0) {
             TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getLastAccessTime() + maxIdleTimeMs);
-            timer.schedule(idleTimerTask, maxIdleTimeMs);
+            timer.schedule(idleTimerTask, maxIdleTimeMs, maxIdleTimeMs);
         }
     }
 
