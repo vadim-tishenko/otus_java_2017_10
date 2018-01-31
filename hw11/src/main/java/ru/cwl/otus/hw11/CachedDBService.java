@@ -10,14 +10,19 @@ import ru.cwl.otus.hw10.model.DataSet;
 /**
  * Created by tischenko on 31.01.2018 11:32.
  */
-public class CascedDBService implements DBService {
-    DBService dbService = new DBServiceHibernateImpl();
-    CacheEngine<Key, DataSet> cacheEngine = new CacheEngine<>();
+public class CachedDBService implements DBService {
+    DBService dbService;
+    CacheEngine<Key, DataSet> cacheEngine;// = new CacheEngine<>();
+
+    public CachedDBService(DBService dbService, CacheEngine<Key, DataSet> cacheEngine) {
+        this.dbService = dbService;
+        this.cacheEngine = cacheEngine;
+    }
 
     @Override
     public <T extends DataSet> void save(T entity) {
         dbService.save(entity);
-        Key key = new Key(entity.getId(), entity.getClass());
+        Key key = Key.of(entity);
         cacheEngine.put(key,entity);
     }
 
@@ -38,7 +43,7 @@ public class CascedDBService implements DBService {
     public <T extends DataSet> List<T> load(Class<T> clazz) {
         List<T> result = dbService.load(clazz);
         for (T entity : result) {
-            Key key = new Key(entity.getId(), entity.getClass());
+            Key key = Key.of(entity);
             cacheEngine.put(key, entity);
         }
         return result;
@@ -60,6 +65,9 @@ class Key {
         this.clazz = clazz;
     }
 
+    static Key of(DataSet entity){
+        return new Key(entity.getId(),entity.getClass());
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
