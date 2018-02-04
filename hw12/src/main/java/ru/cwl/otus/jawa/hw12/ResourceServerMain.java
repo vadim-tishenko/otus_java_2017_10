@@ -13,6 +13,7 @@ import org.eclipse.jetty.util.resource.Resource;
  */
 public class ResourceServerMain {
     public static void main(String[] args) throws Exception {
+        final int PORT = 8888;
 
         ResourceHandler rh = new ResourceHandler();
         rh.setBaseResource(Resource.newClassPathResource("/pub/"));
@@ -24,13 +25,13 @@ public class ResourceServerMain {
         MonitoringBean mb = new MonitoringBean();
         context.addServlet(new ServletHolder(new MonitoringServlet(mb)),"/serv1");
 
-        Server server = new Server(8888);
+        Server server = new Server(PORT);
         server.setHandler(new HandlerList(rh,rh2,context));
 
         server.start();
         //server.toString()
         //System.out.println(server.dump());
-        System.out.println("started! http://localhost:"+8888);
+        System.out.println("started! http://localhost:"+ PORT);
         server.join();
     }
 }
