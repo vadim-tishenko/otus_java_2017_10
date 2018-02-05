@@ -35,7 +35,7 @@ public class DBServiceHibernateImpl implements DBService {
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         Session s = sf.openSession();
-        T t = s.load(clazz, id);
+        T t = s.get(clazz, id);
         s.close();
         return t;
     }

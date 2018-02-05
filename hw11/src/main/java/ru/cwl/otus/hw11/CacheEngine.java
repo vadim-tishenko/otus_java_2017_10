@@ -74,19 +74,19 @@ public class CacheEngine<K, V> {
         }
     }
 
-    int size() {
+    public int size() {
         return map.size();
     }
 
-    long getHitCount() {
+    public long getHitCount() {
         return hitCount;
     }
 
-    long getMisCount() {
+    public long getMisCount() {
         return misCount;
     }
 
-    void dispose() {
+    public void dispose() {
         timer.cancel();
     }
 
