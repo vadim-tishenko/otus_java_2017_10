@@ -133,4 +133,19 @@ public class CacheEngine<K, V> {
         }
     }
 
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public long getMaxLifeTimeMs() {
+        return maxLifeTimeMs;
+    }
+
+    public long getMaxIdleTimeMs() {
+        return maxIdleTimeMs;
+    }
+
+    public boolean isEternal() {
+        return isEternal;
+    }
 }

@@ -1,4 +1,4 @@
-package ru.cwl.otus.jawa.hw12;
+package ru.cwl.otus.hw12;
 
 import ru.cwl.otus.hw10.DBService;
 import ru.cwl.otus.hw10.model.AddressDataSet;
