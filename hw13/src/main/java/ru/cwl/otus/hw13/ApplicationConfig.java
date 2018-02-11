@@ -41,7 +41,6 @@ public class ApplicationConfig {
     @Bean
     PayLoadService payLoadService(@Qualifier("getCDBService") DBService dbService){
         return new PayLoadService(dbService);
-
     }
 
 }

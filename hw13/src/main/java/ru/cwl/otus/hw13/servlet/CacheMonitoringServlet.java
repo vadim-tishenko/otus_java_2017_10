@@ -1,10 +1,13 @@
 package ru.cwl.otus.hw13.servlet;
 
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import ru.cwl.otus.hw10.model.DataSet;
 import ru.cwl.otus.hw11.CacheEngine;
 import ru.cwl.otus.hw11.Key;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,30 +22,67 @@ import java.io.PrintWriter;
  */
 @WebServlet("/cache")
 public class CacheMonitoringServlet extends HttpServlet {
-    private CacheEngine<Key, DataSet> ce;
+
+    private TemplateEngine templateEngine;
+    private ServletContext servletContext;
+    private CacheEngine cacheEngine;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ce= (CacheEngine<Key, DataSet>) config.getServletContext().getAttribute("cache");
+        servletContext = config.getServletContext();
+        cacheEngine = (CacheEngine) servletContext.getAttribute("cache");
+        templateEngine = (TemplateEngine) servletContext.getAttribute("templateEngine");
     }
-
-   /* public CacheMonitoringServlet(CacheEngine<Key, DataSet> cacheEngine) {
-        this.ce = cacheEngine;
-    }*/
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        PrintWriter wr = resp.getWriter();
-        wr.printf("<html>\n" +
-                "<head>\n" +
-                "    <title>cache statistics</title>\n" +
-                "    <meta http-equiv=\"refresh\" content=\"2\" />\n" +
-                "</head>\n" +
-                "<body>\n");
-        wr.printf("<br/>maxSize: %d, maxLifeTimeMs: %d, maxIdleTimeMs: %d\n",ce.getMaxSize(),ce.getMaxLifeTimeMs(),ce.getMaxIdleTimeMs());
-        wr.printf("<br/>hit: %d,  mis: %d, size: %d", ce.getHitCount(), ce.getMisCount(), ce.size());
-        wr.print("<br/>\n</body>\n</html>");
-        wr.flush();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        CacheInfo cacheInfo = new CacheInfo(cacheEngine);
+        ctx.setVariable("cacheInfo", cacheInfo);
+        templateEngine.process("cache", ctx, resp.getWriter());
     }
 }
+
+class CacheInfo {
+    private final int maxSize;
+    private final long maxLifeTimeMs;
+    private final long maxIdleTimeMs;
+    private final long hit;
+    private final long mis;
+    private final int size;
+
+    public CacheInfo(CacheEngine ce) {
+        maxSize = ce.getMaxSize();
+        maxLifeTimeMs = ce.getMaxLifeTimeMs();
+        maxIdleTimeMs = ce.getMaxIdleTimeMs();
+        hit = ce.getHitCount();
+        mis = ce.getMisCount();
+        size = ce.size();
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public long getMaxLifeTimeMs() {
+        return maxLifeTimeMs;
+    }
+
+    public long getMaxIdleTimeMs() {
+        return maxIdleTimeMs;
+    }
+
+    public long getHit() {
+        return hit;
+    }
+
+    public long getMis() {
+        return mis;
+    }
+
+    public int getSize() {
+        return size;
+    }
+}
+
