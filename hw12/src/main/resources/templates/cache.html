@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cache statistics</title>
+    <meta http-equiv="refresh" content="2"/>
+</head>
+<body>
+
+<h1>cache engine</h1>
+<div th:object="${cacheInfo}">
+
+    <h2>params</h2>
+    <table>
+        <tr>
+            <th>max Size</th>
+            <th>max LifeTime, ms</th>
+            <th>max IdleTime, ms</th>
+        </tr>
+        <tr>
+            <td th:text="*{maxSize}">000</td>
+            <td th:text="*{maxLifeTimeMs}" class="number">000</td>
+            <td th:text="*{maxIdleTimeMs}" class="number">000</td>
+        </tr>
+    </table>
+    <br/>
+    <h2>statistic</h2>
+    <table>
+        <tr>
+            <th>HIT</th>
+            <th>MIS</th>
+            <th>SIZE</th>
+        </tr>
+        <tr>
+            <td th:text="*{hit}">000</td>
+            <td th:text="*{mis}" class="number">000</td>
+            <td th:text="*{size}" class="number">000</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
