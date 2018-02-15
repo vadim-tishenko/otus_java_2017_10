@@ -7,6 +7,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
+import org.thymeleaf.TemplateEngine;
 import ru.cwl.otus.hw10.DBService;
 import ru.cwl.otus.hw10.hibernate.DBServiceHibernateImpl;
 import ru.cwl.otus.hw10.model.DataSet;
@@ -35,6 +36,7 @@ public class MonitoringServerMain {
         cacheEngine = new CacheEngine<>();
         dbService = new DBServiceHibernateImpl();
         cachedDbService = new CachedDBService(dbService, cacheEngine);
+        TemplateEngine templateEngine = TemplateEngineBuilder.build();
 
         final int PORT = 8888;
 
@@ -44,7 +46,7 @@ public class MonitoringServerMain {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
         context.addFilter(new FilterHolder(new AuthFilter()),  "/cache", EnumSet.of(DispatcherType.REQUEST));
-        context.addServlet(new ServletHolder(new CacheMonitoringServlet(cacheEngine)), "/cache");
+        context.addServlet(new ServletHolder(new CacheMonitoringServlet(cacheEngine,templateEngine)), "/cache");
         context.addServlet(new ServletHolder(new LoginServlet()), "/login");
 
         Server server = new Server(PORT);
