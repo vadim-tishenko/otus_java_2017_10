@@ -3,6 +3,9 @@ package ru.cwl.otus.hw14;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by tischenko on 12.02.2018 11:58.
@@ -14,6 +17,7 @@ public class ParallelSorter {
 
     int[] sort(int[] array, int threadsCount) {
         int[][] la = splitArray(array, threadsCount);
+
         List<Thread> threads = new ArrayList<>();
         for (int[] ts : la) {
             final Thread thread = new Thread(() -> Arrays.sort(ts));
@@ -27,6 +31,25 @@ public class ParallelSorter {
                 e.printStackTrace();
             }
         }
+        int[] result = joinArrays(la, array.length);
+
+        return result;
+    }
+
+    int[] sort2(int[] array, int threadsCount) {
+        int[][] la = splitArray(array, threadsCount);
+        List<Callable<Object>> callables = new ArrayList<>();
+
+        for (int[] ts : la) {
+            callables.add(Executors.callable(()->Arrays.sort(ts)));
+        }
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsCount);
+        try {
+            executorService.invokeAll(callables);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         int[] result = joinArrays(la, array.length);
         return result;
     }

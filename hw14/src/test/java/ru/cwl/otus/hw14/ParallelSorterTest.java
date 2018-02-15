@@ -39,6 +39,14 @@ public class ParallelSorterTest {
         assertTrue(Arrays.equals(result, unsortedArray));
     }
 
+    @Test
+    public void sortTest10Threads2() {
+        int[] result = parallelSorter.sort2(unsortedArray,10);
+        assertTrue(isSorted(result));
+        Arrays.sort(unsortedArray);
+        assertTrue(Arrays.equals(result, unsortedArray));
+    }
+
     private void fillArray(int[] array) {
         Random random = new Random();
         for (int i = 0; i < array.length; i++) {
