@@ -1,5 +1,7 @@
 package ru.cwl.otus.hw12;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.cwl.otus.hw10.DBService;
 import ru.cwl.otus.hw10.model.AddressDataSet;
 import ru.cwl.otus.hw10.model.PhoneDataSet;
@@ -10,6 +12,7 @@ import ru.cwl.otus.hw10.model.UserDataSet;
  * on 05.02.2018 21:09.
  */
 public class PayLoadService implements Runnable {
+    private Logger log = LoggerFactory.getLogger(PayLoadService.class);
     private final DBService dbService;
 
     UserDataSet createUser(int n) {
@@ -33,11 +36,11 @@ public class PayLoadService implements Runnable {
             dbService.save(user);
             dbService.load(1, UserDataSet.class);
             dbService.load(25, UserDataSet.class);
-            System.out.println(i);
+            log.info("payload iteration {}", i);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.debug("", e);
             }
 
         }

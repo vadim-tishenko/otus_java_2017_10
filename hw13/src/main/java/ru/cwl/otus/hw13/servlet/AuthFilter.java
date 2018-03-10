@@ -1,6 +1,9 @@
 package ru.cwl.otus.hw13.servlet;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
@@ -14,9 +17,10 @@ import java.io.IOException;
  */
 @WebFilter("/cache")
 public class AuthFilter implements Filter {
+    private Logger log = LoggerFactory.getLogger(ru.cwl.otus.hw12.servlets.AuthFilter.class);
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("init");
+    public void init(FilterConfig filterConfig) {
+        log.debug("init");
     }
 
     @Override
@@ -25,10 +29,10 @@ public class AuthFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         if (isAuthorized(req)) {
             chain.doFilter(request, response);
-            System.out.println("filter ok");
+            log.debug("filter ok");
         } else {
             ((HttpServletResponse) response).sendRedirect("/login.html");
-            System.out.println("no login!");
+            log.debug("no login!");
         }
     }
 
@@ -45,6 +49,6 @@ public class AuthFilter implements Filter {
 
     @Override
     public void destroy() {
-        System.out.println("destroy");
+        log.debug("destroy");
     }
 }

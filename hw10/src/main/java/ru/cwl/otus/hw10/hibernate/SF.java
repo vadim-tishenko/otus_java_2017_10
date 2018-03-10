@@ -27,7 +27,7 @@ public class SF {
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:h2:~/db_hw10;AUTO_SERVER=TRUE");
         configuration.setProperty("hibernate.connection.username", "sa");
-        configuration.setProperty("hibernate.show_sql", "true");
+        // configuration.setProperty("hibernate.show_sql", "true");
 
         //configuration.setProperty("hibernate.use_sql_comments","true");
         //configuration.setProperty("hibernate.format_sql","true");
@@ -40,8 +40,7 @@ public class SF {
         builder.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = builder.build();
 
-        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        return sessionFactory;
+        return configuration.buildSessionFactory(serviceRegistry);
     }
 
 }

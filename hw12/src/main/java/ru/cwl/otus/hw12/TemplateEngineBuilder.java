@@ -9,7 +9,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  * on 13.02.2018 20:57.
  */
 public class TemplateEngineBuilder {
-    static TemplateEngine build() {
+    public static TemplateEngine build() {
         //log.info("tpl init");
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         // HTML is the default mode, but we will set it anyway for better understanding of code
