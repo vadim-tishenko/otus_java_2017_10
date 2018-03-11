@@ -1,6 +1,6 @@
 package ru.cwl.otus.hw15.servlets;
 
-import ru.cwl.otus.hw15.app.FrontendService;
+import ru.cwl.otus.hw15.system.FrontendService;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServlet;

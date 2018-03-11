@@ -1,4 +1,4 @@
-package ru.cwl.otus.hw15.messages;
+package ru.cwl.otus.hw15.system;
 
 import ru.cwl.otus.hw11.CacheEngine;
 

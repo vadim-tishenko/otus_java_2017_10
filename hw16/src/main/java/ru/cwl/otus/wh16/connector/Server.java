@@ -2,7 +2,6 @@ package ru.cwl.otus.wh16.connector;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Created by tischenko on 05.03.2018 18:13.
@@ -18,8 +17,8 @@ public class Server {
             e.printStackTrace();
         }
 
-        Socket socket = serverSocket.accept();
+       /* Socket socket = serverSocket.accept();
         socket.getInputStream();
-        socket.getOutputStream();
+        socket.getOutputStream();*/
     }
 }

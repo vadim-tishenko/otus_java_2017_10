@@ -1,7 +1,5 @@
-package ru.cwl.otus.hw15.messages;
+package ru.cwl.otus.hw15.system;
 
-import ru.cwl.otus.hw15.app.CacheService;
-import ru.cwl.otus.hw15.app.MsgToCache;
 import ru.cwl.otus.hw15.messageSystem.Address;
 
 /**

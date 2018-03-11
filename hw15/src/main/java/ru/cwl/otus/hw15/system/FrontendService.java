@@ -1,8 +1,7 @@
-package ru.cwl.otus.hw15.app;
+package ru.cwl.otus.hw15.system;
 
 
 import ru.cwl.otus.hw15.messageSystem.Addressee;
-import ru.cwl.otus.hw15.messages.CacheInfo;
 
 import javax.servlet.AsyncContext;
 

@@ -1,10 +1,10 @@
 package ru.cwl.otus.hw15.cache;
 
 import ru.cwl.otus.hw11.CacheEngine;
-import ru.cwl.otus.hw15.app.AbstractAddressee;
-import ru.cwl.otus.hw15.app.CacheService;
 import ru.cwl.otus.hw15.messageSystem.Address;
 import ru.cwl.otus.hw15.messageSystem.MessageSystem;
+import ru.cwl.otus.hw15.system.AbstractAddressee;
+import ru.cwl.otus.hw15.system.CacheService;
 
 /**
  * Created by vadim.tishenko

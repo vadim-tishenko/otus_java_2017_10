@@ -2,12 +2,12 @@ package ru.cwl.otus.hw15.front;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import ru.cwl.otus.hw15.app.AbstractAddressee;
-import ru.cwl.otus.hw15.app.FrontendService;
 import ru.cwl.otus.hw15.messageSystem.Address;
 import ru.cwl.otus.hw15.messageSystem.MessageSystem;
-import ru.cwl.otus.hw15.messages.CacheInfo;
-import ru.cwl.otus.hw15.messages.CacheInfoRequestMessage;
+import ru.cwl.otus.hw15.system.AbstractAddressee;
+import ru.cwl.otus.hw15.system.CacheInfo;
+import ru.cwl.otus.hw15.system.CacheInfoRequestMessage;
+import ru.cwl.otus.hw15.system.FrontendService;
 
 import javax.servlet.AsyncContext;
 import java.io.IOException;

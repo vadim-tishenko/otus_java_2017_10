@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import ru.cwl.otus.hw12.servlets.AuthFilter;
 import ru.cwl.otus.hw12.servlets.LoginServlet;
 import ru.cwl.otus.hw15.servlets.CacheMonitoringServlet;
+import ru.cwl.otus.hw15.system.FrontendService;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;

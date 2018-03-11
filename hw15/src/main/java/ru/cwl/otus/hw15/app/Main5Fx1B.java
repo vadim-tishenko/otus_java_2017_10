@@ -16,6 +16,8 @@ import ru.cwl.otus.hw15.cache.CacheServiceImpl;
 import ru.cwl.otus.hw15.front.FrontendServiceImpl;
 import ru.cwl.otus.hw15.messageSystem.Address;
 import ru.cwl.otus.hw15.messageSystem.MessageSystem;
+import ru.cwl.otus.hw15.system.CacheService;
+import ru.cwl.otus.hw15.system.FrontendService;
 
 /**
  * Created by tischenko on 05.03.2018 22:06.
