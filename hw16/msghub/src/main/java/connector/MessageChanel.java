@@ -1,6 +1,4 @@
-package ru.cwl.otus.wh16.connector;
-
-import java.util.concurrent.BlockingQueue;
+package connector;
 
 /**
  * Created by tischenko on 06.03.2018 0:16.
