@@ -4,7 +4,7 @@ package connector;
  * Created by vadim.tishenko
  * on 19.03.2018 22:23.
  */
-public class TestMsg {
+public class TestMsg implements Message {
     String from;
     String to;
     String value;

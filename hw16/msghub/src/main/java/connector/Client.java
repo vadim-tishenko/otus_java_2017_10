@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Created by tischenko on 05.03.2018 18:13.
  */
 public class Client {
-    public static final long COUNT = 100_000_000;
+    private static final long COUNT = 100_000_000;
     static Logger log = LoggerFactory.getLogger(Client.class);
 
     public static void main(String[] args) throws JsonProcessingException {
@@ -54,5 +54,8 @@ public class Client {
 23:03:14.097 [main] INFO connector.Client - stat: IOPS: 185528.75695732838
 23:03:14.097 [main] INFO connector.Client - stat: IOPS: 185528.75695732838
 23:07:22.167 [main] INFO connector.Client - stat: IOPS: 674127.0055278414
+
+20:54:32.533 [main] INFO connector.Client - stat: IOPS: 1171646.1628588166
+20:54:32.533 [main] INFO connector.Client - stat: MBps: 69.27686891293204
 
  */
