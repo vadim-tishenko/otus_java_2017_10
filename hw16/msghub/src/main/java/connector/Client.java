@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Created by tischenko on 05.03.2018 18:13.
  */
 public class Client {
-    public static final long COUNT = 10_000_000;
+    public static final long COUNT = 100_000_000;
     static Logger log = LoggerFactory.getLogger(Client.class);
 
     public static void main(String[] args) throws JsonProcessingException {
@@ -33,7 +33,7 @@ public class Client {
         ) {
             long n0 = System.nanoTime();
             for (int i = 0; i < COUNT; i++) {
-                out.println(msg.getClass().getCanonicalName());
+                out.println(msg.getClass().getName());
                 out.println(mapper.writeValueAsString(msg));
                 out.println();
                 // log.info("msg {} sent", msg);
