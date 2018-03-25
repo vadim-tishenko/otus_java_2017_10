@@ -1,43 +1,44 @@
 package connector;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by tischenko on 05.03.2018 18:13.
  */
-public class Client {
+public class DbClient {
     private static final long COUNT = 100_000_000;
-    static Logger log = LoggerFactory.getLogger(Client.class);
+    static Logger log = LoggerFactory.getLogger(DbClient.class);
 
     public static void main(String[] args) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        //ObjectMapper mapper = new ObjectMapper();
         String hostName = "localhost";
         int portNumber = 8000;
-        TestMsg msg = new TestMsg("front", "db", "val3");
-        int len = String.format("%s\n%s\n\n", msg.getClass().getCanonicalName(), mapper.writeValueAsString(msg)).length();
+        // TestMsg msg = new TestMsg("front", "db", "val3");
+        // int len = String.format("%s\n%s\n\n", msg.getClass().getCanonicalName(), mapper.writeValueAsString(msg)).length();
 
         try (
                 Socket socket = new Socket(hostName, portNumber);
-                PrintWriter out = new PrintWriter(socket.getOutputStream());//, true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                /*PrintWriter out = new PrintWriter(socket.getOutputStream());//, true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));*/
         ) {
-            log.info("out conn: ", socket);
 
-            out.println(msg.from);
-            out.println();
+            Connector conn = new Connector(socket, "db");
+            conn.onReceive((m) -> {
+
+            });
+            Thread.sleep(10_000);
+            conn.close();
+            /*log.info("out conn: ", conn);
+
 
             long n0 = System.nanoTime();
             for (int i = 0; i < COUNT; i++) {
+
                 out.println(msg.getClass().getName());
                 out.println(mapper.writeValueAsString(msg));
                 out.println();
@@ -48,19 +49,12 @@ public class Client {
             long n1 = System.nanoTime();
             log.info("stat: IOPS: {}", COUNT * 1000.0d / TimeUnit.NANOSECONDS.toMillis(n1 - n0));
             log.info("stat: MBps: {}", len * COUNT * 1000.0d / TimeUnit.NANOSECONDS.toMillis(n1 - n0) / (1024 * 1024));
-
+*/
 
         } catch (IOException e) {
             log.error("", e);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
-/*
-23:03:14.097 [main] INFO connector.Client - stat: IOPS: 185528.75695732838
-23:03:14.097 [main] INFO connector.Client - stat: IOPS: 185528.75695732838
-23:07:22.167 [main] INFO connector.Client - stat: IOPS: 674127.0055278414
-
-20:54:32.533 [main] INFO connector.Client - stat: IOPS: 1171646.1628588166
-20:54:32.533 [main] INFO connector.Client - stat: MBps: 69.27686891293204
-
- */

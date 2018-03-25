@@ -82,6 +82,7 @@ public class Server {
                     // убрать обработчик
 
                     log.info("bye received.");
+
                     break;
                 }
                 Class<?> clazz = classMap.get(className);
