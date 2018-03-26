@@ -31,7 +31,7 @@ public class DbClient {
             conn.onReceive((m) -> {
 
             });
-            Thread.sleep(10_000);
+            Thread.sleep(100_000);
             conn.close();
             /*log.info("out conn: ", conn);
 

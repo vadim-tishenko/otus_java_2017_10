@@ -15,10 +15,12 @@ import java.util.concurrent.*;
  * не принимает и не передает.
  */
 public class MsgRouter {
-    final Logger log = LoggerFactory.getLogger(MsgRouter.class);
-    ConcurrentMap<String, BlockingQueue<Message>> map = new ConcurrentHashMap<String, BlockingQueue<Message>>();
-    BlockingQueue<Message> defQueue = new LinkedBlockingQueue<Message>();
-    ExecutorService exec = Executors.newCachedThreadPool();
+
+    private final Logger log = LoggerFactory.getLogger(MsgRouter.class);
+
+    private ConcurrentMap<String, BlockingQueue<Message>> map = new ConcurrentHashMap<>();
+    private BlockingQueue<Message> defQueue = new LinkedBlockingQueue<>();
+    private ExecutorService exec = Executors.newCachedThreadPool();
 
     MsgRouter() {
         exec.execute(() -> {
@@ -26,7 +28,7 @@ public class MsgRouter {
             try {
                 while (true) {
                     Message msg = defQueue.take();
-                    log.warn("queue {} not found!", msg.getTo());
+                    log.warn("queue {} not found! q.size: {}", msg.getTo(), defQueue.size());
                 }
             } catch (InterruptedException e) {
                 log.error("", e);
@@ -45,8 +47,8 @@ public class MsgRouter {
 
     void attach(Connector conn) {
         String address = conn.getAddress();
-        BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
-        BlockingQueue<Message> res = map.putIfAbsent(address, queue);
+        BlockingQueue<Message> msgQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Message> res = map.putIfAbsent(address, msgQueue);
         if (null != res) {
             log.warn("queue for address {} already registered", address);
             throw new RuntimeException("address already registered");
@@ -56,14 +58,21 @@ public class MsgRouter {
             Thread.currentThread().setName("send-" + address);
             try {
                 while (true) {
-                    Message msg = queue.take();
+                    Message msg = msgQueue.take();
+                    if (!conn.isOn()) {
+                        BlockingQueue<Message> q = map.remove(address);
+                        q.clear();
+                        log.info("queue {} removed.", address);
+                        break;
+                    }
                     conn.send(msg);
                 }
+                log.info("send-" + address + "thread closiing...");
             } catch (InterruptedException e) {
                 log.error("", e);
             }
         });
         log.info("attach addr:{} conn:{}", address, conn);
-
     }
+
 }

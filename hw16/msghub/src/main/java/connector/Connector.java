@@ -21,44 +21,56 @@ import java.util.function.Consumer;
  */
 public class Connector {
     private Logger log = LoggerFactory.getLogger(Connector.class);
-    private static ConcurrentHashMap<String, Class<?>> classMap = new ConcurrentHashMap<>();
+
+    private static ConcurrentHashMap<String, Class<?>> classMap;
+    private final static ExecutorService exec;
+    private static ObjectMapper mapper;
+
+    static {
+        classMap = new ConcurrentHashMap<>();
+        exec = Executors.newCachedThreadPool();
+        mapper = new ObjectMapper();
+    }
 
     private Socket socket;
     private String address;
     private PrintWriter out;
     private BufferedReader in;
-    private ObjectMapper mapper = new ObjectMapper();
     private Consumer<Message> msgConsumer;
-    private final ExecutorService exec;
+    private final ConnType type;
+    private volatile boolean on = true;
 
+    // server side
     public Connector(Socket socket) {
-        exec = Executors.newCachedThreadPool();
+        type = ConnType.SERVER;
         this.socket = socket;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             address = in.readLine();
             in.readLine();
+
         } catch (IOException e) {
             log.error("", e);
         }
 
     }
 
+    // client side
     public Connector(Socket socket, String address) {
-        exec = Executors.newCachedThreadPool();
+        type = ConnType.CLIENT;
         this.socket = socket;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             this.address = address;
             out.println(address);
             out.println();
         } catch (IOException e) {
             log.error("", e);
         }
-
-
     }
 
     public String getAddress() {
@@ -71,14 +83,18 @@ public class Connector {
         out.println();
     }
 
-    void close() {
+    public void close() {
         try {
-            out.println("bye.");
-            out.println();
-            out.flush();
+            if (type == ConnType.CLIENT) {
+                out.println("bye.");
+                out.println();
+                out.flush();
+            }
+            out.close();
             in.close();
+            socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("", e);
         }
         out.close();
     }
@@ -90,13 +106,34 @@ public class Connector {
             try {
                 while (true) {
                     String className = in.readLine();
-                    if (className.equals("bye.")) {
-                        // выписаться из адресной книги
-                        // убрать обработчик
+                    if (type == ConnType.SERVER) {
+                        if (className.equals("bye.")) {
 
-                        log.info("bye received.");
+                            // выписаться из адресной книги
+                            // убрать обработчик
+                            log.info("bye received.");
 
-                        break;
+                            on = false;
+                            // send unlock queue msg
+                            msgConsumer.accept(new Message() {
+                                @Override
+                                public String getFrom() {
+                                    return null;
+                                }
+
+                                @Override
+                                public String getTo() {
+                                    return address;
+                                }
+                            });
+
+                            out.close();
+                            in.close();
+                            socket.close();
+
+                            log.info("conn closed");
+                            break;
+                        }
                     }
 
                     Class<?> clazz = classMap.get(className);
@@ -123,7 +160,6 @@ public class Connector {
                 }
             }
         });
-
     }
 
     private String msg2json(Message msg) {
@@ -137,5 +173,17 @@ public class Connector {
 
     private Object json2msg(Class<?> clazz, String json) throws IOException {
         return mapper.readValue(json, clazz);
+    }
+
+    public boolean isOn() {
+        return on;
+    }
+
+    enum ConnType {
+        CLIENT,
+        SERVER;
+
+        void close() {
+        }
     }
 }
